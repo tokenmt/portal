@@ -34,6 +34,10 @@ export const ui = {
     'dl.desc': 'Desktop app installers for the latest release.',
     'dl.windows': 'Windows', 'dl.macos': 'macOS', 'dl.linux': 'Linux',
     'dl.latest': 'Latest release',
+    'about.title': 'About TokenMate',
+    'about.body': 'TokenMate is a self-hosted LLM gateway built for teams that need control over routing, quota and usage.',
+    'about.contact': 'Contact us',
+    'about.email': 'hello@unclemt.cn',
   },
   zh: {
     'nav.home': '首页',
@@ -70,5 +74,9 @@ export const ui = {
     'dl.desc': '桌面应用最新版本安装包。',
     'dl.windows': 'Windows', 'dl.macos': 'macOS', 'dl.linux': 'Linux',
     'dl.latest': '最新版本',
+    'about.title': '关于 TokenMate',
+    'about.body': 'TokenMate 是一个自托管 LLM 网关，为需要掌控路由、配额与用量的团队而生。',
+    'about.contact': '联系我们',
+    'about.email': 'hello@unclemt.cn',
   },
 } as const;
