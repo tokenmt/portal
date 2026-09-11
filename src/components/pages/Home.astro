@@ -1,5 +1,34 @@
 ---
-interface Props { locale: 'en' | 'zh' }
+import { t, type Locale } from '../../i18n';
+import { translateUrl as url } from '../../i18n/paths';
+interface Props { locale: Locale }
 const { locale } = Astro.props;
+const features = [['home.f1.title', 'home.f1.desc'], ['home.f2.title', 'home.f2.desc'], ['home.f3.title', 'home.f3.desc']] as const;
+const editions = ['community', 'team', 'saas', 'enterprise'] as const;
 ---
-<h1>{locale}</h1>
+<section>
+  <h1>{t(locale, 'home.heroTitle')}</h1>
+  <p style="font-size:1.25rem;color:var(--muted)">{t(locale, 'home.heroTagline')}</p>
+  <p><a class="cta" href={url('/download', locale)} style="display:inline-block;background:var(--accent);color:#fff;padding:.6rem 1.4rem;border-radius:6px">{t(locale, 'home.cta')}</a></p>
+</section>
+<section>
+  <h2>{t(locale, 'home.featuresTitle')}</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem">
+    {features.map(([title, desc]) => (
+      <div style="border:1px solid var(--border);border-radius:8px;padding:1rem">
+        <h3 style="margin-top:0">{t(locale, title)}</h3>
+        <p style="color:var(--muted)">{t(locale, desc)}</p>
+      </div>
+    ))}
+  </div>
+</section>
+<section>
+  <h2>{t(locale, 'home.editionsTitle')}</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem">
+    {editions.map((e) => (
+      <a href={url('/pricing', locale)} style="border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center">
+        {t(locale, 'home.edition.' + e)}
+      </a>
+    ))}
+  </div>
+</section>
