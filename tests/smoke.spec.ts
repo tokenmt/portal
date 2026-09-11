@@ -54,3 +54,13 @@ for (const { prefix, platform, releases } of [
     await expect(link).toHaveAttribute('href', /github\.com\/tokenmt\/tokenhub-desktop/);
   });
 }
+
+for (const { prefix, marker } of [
+  { prefix: '', marker: 'Contact' },
+  { prefix: '/zh', marker: '联系我们' },
+]) {
+  test(`about loads ${prefix || 'en'}`, async ({ page }) => {
+    await page.goto(prefix + '/about');
+    await expect(page.locator('main')).toContainText(marker);
+  });
+}
