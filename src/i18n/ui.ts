@@ -30,6 +30,10 @@ export const ui = {
     'ed.quota': 'Member quota',
     'ed.hosted': 'Hosted / managed',
     'ed.support': 'Dedicated support',
+    'dl.title': 'Download',
+    'dl.desc': 'Desktop app installers for the latest release.',
+    'dl.windows': 'Windows', 'dl.macos': 'macOS', 'dl.linux': 'Linux',
+    'dl.latest': 'Latest release',
   },
   zh: {
     'nav.home': '首页',
@@ -62,5 +66,9 @@ export const ui = {
     'ed.quota': '成员配额',
     'ed.hosted': '托管服务',
     'ed.support': '专属支持',
+    'dl.title': '下载',
+    'dl.desc': '桌面应用最新版本安装包。',
+    'dl.windows': 'Windows', 'dl.macos': 'macOS', 'dl.linux': 'Linux',
+    'dl.latest': '最新版本',
   },
 } as const;

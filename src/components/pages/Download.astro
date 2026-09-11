@@ -1,0 +1,16 @@
+---
+import { t, type Locale } from '../../i18n';
+import { platforms, RELEASES_URL } from '../../data/downloads';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+---
+<h1>{t(locale, 'dl.title')}</h1>
+<p style="color:var(--muted)">{t(locale, 'dl.desc')}</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem">
+  {platforms.map((p) => (
+    <div style="border:1px solid var(--border);border-radius:8px;padding:1.5rem;text-align:center">
+      <h3 style="margin:0 0 .5rem">{t(locale, p.labelKey)}</h3>
+      <a href={`${RELEASES_URL}/latest`} target="_blank" rel="noopener" aria-label={`${t(locale, p.labelKey)} releases`}>{t(locale, 'dl.latest')}</a>
+    </div>
+  ))}
+</div>

@@ -42,3 +42,15 @@ for (const { prefix, nameCol, capRow } of [
     await expect(page.locator('table')).toContainText(capRow);
   });
 }
+
+for (const { prefix, platform, releases } of [
+  { prefix: '', platform: 'Windows', releases: 'releases' },
+  { prefix: '/zh', platform: 'Windows', releases: 'releases' },
+]) {
+  test(`download loads ${prefix || 'en'}`, async ({ page }) => {
+    await page.goto(prefix + '/download');
+    await expect(page.locator('main')).toContainText(platform);
+    const link = page.getByRole('link', { name: new RegExp(releases) }).first();
+    await expect(link).toHaveAttribute('href', /github\.com\/tokenmt\/tokenhub-desktop/);
+  });
+}
