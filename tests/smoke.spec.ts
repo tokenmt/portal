@@ -31,3 +31,14 @@ for (const { prefix, hero, feature } of [
     await expect(page.locator('main')).toContainText(feature);
   });
 }
+
+for (const { prefix, nameCol, capRow } of [
+  { prefix: '', nameCol: 'Community', capRow: 'Team management' },
+  { prefix: '/zh', nameCol: '社区版', capRow: '团队管理' },
+]) {
+  test(`pricing loads ${prefix || 'en'}`, async ({ page }) => {
+    await page.goto(prefix + '/pricing');
+    await expect(page.locator('table')).toContainText(nameCol);
+    await expect(page.locator('table')).toContainText(capRow);
+  });
+}
