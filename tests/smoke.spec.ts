@@ -20,3 +20,14 @@ test('lang switcher navigates en -> zh -> en', async ({ page }) => {
   await page.getByRole('link', { name: 'English' }).click();
   await expect(page).toHaveURL(/\/$/);
 });
+
+for (const { prefix, hero, feature } of [
+  { prefix: '', hero: 'TokenMate', feature: 'Multi-provider' },
+  { prefix: '/zh', hero: 'TokenMate', feature: '多供应商' },
+]) {
+  test(`home content ${prefix || 'en'}`, async ({ page }) => {
+    await page.goto(prefix + '/');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(hero);
+    await expect(page.locator('main')).toContainText(feature);
+  });
+}
