@@ -1,0 +1,17 @@
+---
+import { t, altPath, type Locale } from '../i18n';
+import { translateUrl } from '../i18n/paths';
+
+interface Props { locale: Locale; path: string; }
+const { locale, path } = Astro.props;
+const nav = [['/', 'nav.home'], ['/pricing', 'nav.pricing'], ['/download', 'nav.download'], ['/about', 'nav.about']] as const;
+---
+<header style="border-bottom:1px solid var(--border)">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;height:56px">
+    <a href={translateUrl('/', locale)} style="font-weight:700;color:var(--fg);text-decoration:none">TokenMate</a>
+    <nav style="display:flex;gap:1.5rem;align-items:center">
+      {nav.map(([href, key]) => <a href={translateUrl(href, locale)}>{t(locale, key)}</a>)}
+      <a href={altPath(locale, path)} hreflang={locale === 'en' ? 'zh' : 'en'}>{t(locale, 'nav.langSwitch')}</a>
+    </nav>
+  </div>
+</header>
