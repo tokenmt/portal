@@ -64,3 +64,24 @@ for (const { prefix, marker } of [
     await expect(page.locator('main')).toContainText(marker);
   });
 }
+
+test('theme toggle flips data-theme', async ({ page }) => {
+  await page.goto('/');
+  const html = page.locator('html');
+  await expect(html).toHaveAttribute('data-theme', /^(light|dark)$/);
+  const before = (await html.getAttribute('data-theme'))!;
+
+  await page.getByRole('button', { name: /theme/i }).first().click();
+  await expect(html).toHaveAttribute('data-theme', before === 'dark' ? 'light' : 'dark');
+});
+
+test('theme choice persists across reload', async ({ page }) => {
+  await page.goto('/');
+  const html = page.locator('html');
+  await page.getByRole('button', { name: /theme/i }).first().click();
+  const chosen = await html.getAttribute('data-theme');
+
+  await page.reload();
+  await expect(html).toHaveAttribute('data-theme', chosen!);
+});
+

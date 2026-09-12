@@ -1,9 +1,192 @@
-:root { --fg: #1a1a1a; --bg: #ffffff; --muted: #6b7280; --accent: #2563eb; --border: #e5e7eb; }
-@media (prefers-color-scheme: dark) {
-  :root { --fg: #f3f4f6; --bg: #111827; --muted: #9ca3af; --accent: #60a5fa; --border: #374151; }
+/* ===== Theme tokens =====
+ * data-theme attribute driven, set by the inline script in Base.astro.
+ * Warm-orange accent derived from the logo (orange sun + cyan carets).
+ * Dark is near-black; light is its degraded twin (glow -> subtle shadow).
+ */
+:root {
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --fg: #0b0f19;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --accent: #ea580c;
+  --accent-rgb: 234, 88, 12;
+  --accent-2: #06b6d4;
+  --glow: 0 1px 3px rgba(var(--accent-rgb), 0.12);
+  --grid: none;
+
+  color-scheme: light;
 }
+
+[data-theme='dark'] {
+  --bg: #0a0f1c;
+  --surface: #111827;
+  --fg: #e6edf7;
+  --muted: #94a3b8;
+  --border: rgba(148, 163, 184, 0.16);
+  --accent: #fb923c;
+  --accent-rgb: 251, 146, 60;
+  --accent-2: #22d3ee;
+  --glow: 0 0 20px rgba(var(--accent-rgb), 0.28);
+  --grid: repeating-linear-gradient(
+      to right,
+      rgba(148, 163, 184, 0.07) 0 1px,
+      transparent 1px 64px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(148, 163, 184, 0.07) 0 1px,
+      transparent 1px 64px
+    );
+
+  color-scheme: dark;
+}
+
+/* ===== Base ===== */
 * { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--fg); background: var(--bg); line-height: 1.6; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.6;
+}
+
+/* Ambient backdrop: warm radial glow over an optional dark-mode grid. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(
+      ellipse 80% 50% at 50% -10%,
+      rgba(var(--accent-rgb), 0.08),
+      transparent 70%
+    ),
+    var(--grid);
+}
+
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; letter-spacing: -0.02em; }
+h2 { margin-top: 3rem; letter-spacing: -0.01em; }
+
 .container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ===== Components ===== */
+.grid { display: grid; gap: 1.5rem; }
+.grid-features { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.grid-editions { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+.grid-platforms { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  background: var(--surface);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.card h3 { margin-top: 0; }
+
+.card-link { display: block; text-align: center; color: var(--fg); }
+.card-platform { padding: 1.5rem; text-align: center; }
+
+.cta {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-weight: 600;
+  box-shadow: var(--glow);
+}
+.cta:hover { text-decoration: none; filter: brightness(1.1); }
+
+.muted { color: var(--muted); }
+.lead { font-size: 1.25rem; color: var(--muted); }
+
+/* ===== Header ===== */
+.site-header { border-bottom: 1px solid var(--border); }
+.header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  min-height: 60px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+.brand:hover { text-decoration: none; }
+.brand img { display: block; }
+
+.site-nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1.4rem; align-items: center; }
+.nav-actions { display: flex; gap: 0.75rem; align-items: center; margin-left: auto; }
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--fg);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle svg { display: block; }
+/* Icon pair is swapped by data-theme; no JS re-render needed. */
+[data-theme='dark'] .icon-sun,
+:root:not([data-theme='dark']) .icon-moon { display: none; }
+
+/* ===== Table ===== */
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid var(--border); padding: 0.5rem; }
+th:first-child { text-align: left; }
+td { text-align: center; }
+tbody tr:hover { background: var(--surface); }
+
+/* ===== Footer ===== */
+.site-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 4rem;
+  padding: 2rem 0;
+  color: var(--muted);
+}
+
+/* ===== Motion ===== */
+@media (prefers-reduced-motion: no-preference) {
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: var(--glow);
+  }
+
+  .fade-up { animation: fadeUp 0.5s ease-out backwards; }
+  .fade-up:nth-child(2) { animation-delay: 0.08s; }
+  .fade-up:nth-child(3) { animation-delay: 0.16s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/* Suppress transitions on the frame where the theme flips, so the
+ * whole page does not animate its colors. */
+[data-theme-transitioning] *,
+[data-theme-transitioning] *::before,
+[data-theme-transitioning] *::after {
+  transition: none !important;
+}

@@ -5,11 +5,11 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 ---
 <h1>{t(locale, 'dl.title')}</h1>
-<p style="color:var(--muted)">{t(locale, 'dl.desc')}</p>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem">
+<p class="muted">{t(locale, 'dl.desc')}</p>
+<div class="grid grid-platforms">
   {platforms.map((p) => (
-    <div style="border:1px solid var(--border);border-radius:8px;padding:1.5rem;text-align:center">
-      <h3 style="margin:0 0 .5rem">{t(locale, p.labelKey)}</h3>
+    <div class="card card-platform">
+      <h3>{t(locale, p.labelKey)}</h3>
       <a href={`${RELEASES_URL}/latest`} target="_blank" rel="noopener" aria-label={`${t(locale, p.labelKey)} releases`}>{t(locale, 'dl.latest')}</a>
     </div>
   ))}
