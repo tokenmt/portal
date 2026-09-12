@@ -5,5 +5,3 @@ const { locale } = Astro.props;
 ---
 <h1>{t(locale, 'about.title')}</h1>
 <p>{t(locale, 'about.body')}</p>
-<h2>{t(locale, 'about.contact')}</h2>
-<p><a href={`mailto:${t(locale, 'about.email')}`}>{t(locale, 'about.email')}</a></p>
