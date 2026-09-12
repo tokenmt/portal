@@ -17,7 +17,10 @@ const { locale, title, description = 'TokenMate' } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script is:inline>
       // Must run before first paint: resolve theme from storage, else the OS.
-      const stored = localStorage.getItem('theme');
+      // Storage access throws in Safari private mode / cookie-blocked contexts.
+      try {
+        var stored = localStorage.getItem('theme');
+      } catch (e) { /* fall through to the OS preference */ }
       document.documentElement.dataset.theme =
         stored || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     </script>
