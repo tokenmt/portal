@@ -3,7 +3,7 @@ import { t, type Locale } from '../i18n';
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 ---
-<footer style="border-top:1px solid var(--border);margin-top:4rem;padding:2rem 0;color:var(--muted)">
+<footer class="site-footer">
   <div class="container">
     <p>{t(locale, 'footer.tagline')}</p>
     <p>{t(locale, 'footer.copyright')}</p>

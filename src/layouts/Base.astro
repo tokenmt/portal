@@ -14,6 +14,13 @@ const { locale, title, description = 'TokenMate' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      // Must run before first paint: resolve theme from storage, else the OS.
+      const stored = localStorage.getItem('theme');
+      document.documentElement.dataset.theme =
+        stored || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    </script>
   </head>
   <body>
     <Header locale={locale} path={Astro.url.pathname} />

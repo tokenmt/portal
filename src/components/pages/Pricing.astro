@@ -5,23 +5,21 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 ---
 <h1>{t(locale, 'pricing.title')}</h1>
-<table style="width:100%;border-collapse:collapse">
-  <thead>
-    <tr>
-      <th></th>
-      {editions.map((e) => <th style="border:1px solid var(--border);padding:.5rem">{t(locale, 'ed.' + e.id)}</th>)}
-    </tr>
-  </thead>
-  <tbody>
-    {capabilityKeys.map((cap) => (
+<div class="card">
+  <table>
+    <thead>
       <tr>
-        <th style="border:1px solid var(--border);padding:.5rem;text-align:left">{t(locale, cap)}</th>
-        {editions.map((e) => (
-          <td style="border:1px solid var(--border);padding:.5rem;text-align:center">
-            {e.featureKeys.includes(cap) ? '✓' : '—'}
-          </td>
-        ))}
+        <th></th>
+        {editions.map((e) => <th>{t(locale, 'ed.' + e.id)}</th>)}
       </tr>
-    ))}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {capabilityKeys.map((cap) => (
+        <tr>
+          <th>{t(locale, cap)}</th>
+          {editions.map((e) => <td>{e.featureKeys.includes(cap) ? '✓' : '—'}</td>)}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
