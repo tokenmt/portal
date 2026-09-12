@@ -56,14 +56,22 @@ for (const { prefix, platform, releases } of [
 }
 
 for (const { prefix, marker } of [
-  { prefix: '', marker: 'Contact' },
-  { prefix: '/zh', marker: '联系我们' },
+  { prefix: '', marker: 'self-hosted LLM gateway' },
+  { prefix: '/zh', marker: '自托管 LLM 网关' },
 ]) {
   test(`about loads ${prefix || 'en'}`, async ({ page }) => {
     await page.goto(prefix + '/about');
     await expect(page.locator('main')).toContainText(marker);
   });
 }
+
+test('about page exposes no email address', async ({ page }) => {
+  for (const prefix of ['', '/zh']) {
+    await page.goto(prefix + '/about');
+    await expect(page.locator('main')).not.toContainText('@');
+    await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+  }
+});
 
 test('theme toggle flips data-theme and label names the action', async ({ page }) => {
   await page.goto('/');
