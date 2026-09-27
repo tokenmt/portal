@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "country_code": "MO",
+  "version": "1.0.0",
+  "years": [
+    {
+      "year": 2026,
+      "entries": [
+        { "date": "2026-01-01", "name": "元旦", "type": "holiday" },
+        { "date": "2026-02-17", "name": "農曆正月初一", "type": "holiday" },
+        { "date": "2026-02-18", "name": "農曆正月初二", "type": "holiday" },
+        { "date": "2026-02-19", "name": "農曆正月初三", "type": "holiday" },
+        { "date": "2026-04-03", "name": "耶穌受難日", "type": "holiday" },
+        { "date": "2026-04-04", "name": "復活節前日", "type": "holiday" },
+        { "date": "2026-04-05", "name": "清明節", "type": "holiday" },
+        { "date": "2026-04-06", "name": "復活節前日的補假", "type": "holiday" },
+        { "date": "2026-04-07", "name": "清明節的補假", "type": "holiday" },
+        { "date": "2026-05-01", "name": "勞動節", "type": "holiday" },
+        { "date": "2026-05-24", "name": "佛誕節", "type": "holiday" },
+        { "date": "2026-05-25", "name": "佛誕節的補假", "type": "holiday" },
+        { "date": "2026-06-19", "name": "端午節", "type": "holiday" },
+        { "date": "2026-09-26", "name": "中秋節翌日", "type": "holiday" },
+        { "date": "2026-09-28", "name": "中秋節翌日的補假", "type": "holiday" },
+        { "date": "2026-10-01", "name": "中華人民共和國國慶日", "type": "holiday" },
+        { "date": "2026-10-02", "name": "中華人民共和國國慶日翌日", "type": "holiday" },
+        { "date": "2026-10-18", "name": "重陽節", "type": "holiday" },
+        { "date": "2026-10-19", "name": "重陽節的補假", "type": "holiday" },
+        { "date": "2026-11-02", "name": "追思節", "type": "holiday" },
+        { "date": "2026-12-08", "name": "聖母無原罪瞻禮", "type": "holiday" },
+        { "date": "2026-12-20", "name": "澳門特別行政區成立紀念日", "type": "holiday" },
+        { "date": "2026-12-21", "name": "澳門特別行政區成立紀念日的補假", "type": "holiday" },
+        { "date": "2026-12-22", "name": "冬至", "type": "holiday" },
+        { "date": "2026-12-24", "name": "聖誕節前日", "type": "holiday" },
+        { "date": "2026-12-25", "name": "聖誕節", "type": "holiday" }
+      ]
+    }
+  ]
+}
