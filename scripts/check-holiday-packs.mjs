@@ -3,7 +3,7 @@
 // （backend/crates/server/src/services/holiday_packs.rs 的 parse_country_pack / parse_manifest）。
 // 用法：node scripts/check-holiday-packs.mjs
 // 退出码 0 = 全部通过；非 0 = 有失败（fail-loud）。
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -75,6 +75,13 @@ for (const file of packFiles) {
 // ── 每个 manifest 国家必须有对应包 ──
 for (const c of manifest.json.countries) {
   if (!packFiles.includes(`${c.country_code}.json`)) fail('manifest.json', `${c.country_code} listed but ${c.country_code}.json missing`);
+}
+
+// ── .sig 文件必须存在且为 64 字节（backend fetch_bytes 会请求；缺失即 404 中断拉取）──
+for (const f of ['manifest.json', ...packFiles]) {
+  const sig = join(DIR, `${f}.sig`);
+  if (!existsSync(sig)) fail(`${f}.sig`, 'missing (backend requests <file>.sig; 404 aborts fetch)');
+  else if (statSync(sig).size !== 64) fail(`${f}.sig`, `must be 64 raw bytes, got ${statSync(sig).size}`);
 }
 
 // ── 报告 ──
