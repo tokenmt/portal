@@ -38,7 +38,7 @@ body {
   line-height: 1.6;
 }
 
-/* Ambient backdrop: warm radial glow over an optional dark-mode grid. */
+/* Ambient backdrop: warm radial glow over the dark grid. */
 body::before {
   content: '';
   position: fixed;
@@ -64,7 +64,6 @@ h2 { margin-top: 3rem; letter-spacing: -0.01em; }
 /* ===== Components ===== */
 .grid { display: grid; gap: 1.5rem; }
 .grid-features { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.grid-editions { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
 .grid-platforms { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 
 .card {
@@ -78,7 +77,6 @@ h2 { margin-top: 3rem; letter-spacing: -0.01em; }
 }
 .card h3 { margin-top: 0; }
 
-.card-link { display: block; text-align: center; color: var(--fg); }
 .card-platform { padding: 1.5rem; text-align: center; }
 
 .cta {
