@@ -1,0 +1,30 @@
+---
+import { t, type Locale } from '../../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+// ponytail: placeholder frames until real console screenshots replace them (spec D5).
+const alts = ['home.gallery.alt1', 'home.gallery.alt2', 'home.gallery.alt3'] as const;
+---
+<section>
+  <h2>{t(locale, 'home.galleryTitle')}</h2>
+  <div class="grid grid-gallery">
+    {alts.map((alt) => (
+      <figure>
+        <div class="shot" aria-hidden="true"></div>
+        <figcaption class="muted">{t(locale, alt)}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>
+<style>
+  .grid-gallery { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  figure { margin: 0; }
+  .shot {
+    aspect-ratio: 16 / 10;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+  figcaption { font-size: 0.85rem; margin-top: 0.4rem; }
+</style>

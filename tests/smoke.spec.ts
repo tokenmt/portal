@@ -32,6 +32,18 @@ for (const { prefix, hero, feature } of [
   });
 }
 
+for (const { prefix } of [
+  { prefix: '' },
+  { prefix: '/zh' },
+]) {
+  test(`home narrative sections ${prefix || 'en'}`, async ({ page }) => {
+    await page.goto(prefix + '/');
+    await expect(page.locator('.feature-num')).toHaveCount(6);
+    await expect(page.locator('main')).toContainText('SHA-256');
+    await expect(page.locator('main').locator('figure')).toHaveCount(3);
+  });
+}
+
 for (const { prefix, nameCol, capRow } of [
   { prefix: '', nameCol: 'Community', capRow: 'Team management' },
   { prefix: '/zh', nameCol: '社区版', capRow: '团队管理' },

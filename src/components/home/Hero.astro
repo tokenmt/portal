@@ -1,0 +1,23 @@
+---
+import { t, type Locale } from '../../i18n';
+import { translateUrl as url } from '../../i18n/paths';
+import { RELEASE_META } from '../../data/downloads';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+---
+<section class="hero">
+  <h1 class="fade-up">{t(locale, 'home.heroTitle')}</h1>
+  <p class="lead fade-up">{t(locale, 'home.heroTagline')}</p>
+  <p class="muted fade-up">{t(locale, 'home.heroSub')}</p>
+  <p class="fade-up hero-ctas">
+    <a class="cta" href={url('/download', locale)}>{t(locale, 'home.cta')}</a>
+    <a href={url('/pricing', locale)}>{t(locale, 'home.ctaPricing')}</a>
+  </p>
+  <p class="muted fade-up hero-meta">{t(locale, 'home.metaLine')} · v{RELEASE_META.version} · {RELEASE_META.date}</p>
+</section>
+<style>
+  .hero { padding: 3rem 0 1rem; }
+  .hero-ctas { display: flex; gap: 1rem; align-items: center; }
+  .hero-meta { font-size: 0.85rem; }
+</style>
