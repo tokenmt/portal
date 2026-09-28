@@ -8,22 +8,13 @@ interface Props { locale: Locale; title: string; description?: string }
 const { locale, title, description = 'TokenMate' } = Astro.props;
 ---
 <!doctype html>
-<html lang={locale}>
+<html lang={locale} data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <script is:inline>
-      // Must run before first paint: resolve theme from storage, else the OS.
-      // Storage access throws in Safari private mode / cookie-blocked contexts.
-      try {
-        var stored = localStorage.getItem('theme');
-      } catch (e) { /* fall through to the OS preference */ }
-      document.documentElement.dataset.theme =
-        stored || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    </script>
   </head>
   <body>
     <Header locale={locale} path={Astro.url.pathname} />

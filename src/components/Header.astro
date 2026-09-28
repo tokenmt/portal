@@ -1,7 +1,6 @@
 ---
 import { t, altPath, type Locale } from '../i18n';
 import { translateUrl } from '../i18n/paths';
-import ThemeToggle from './ThemeToggle.astro';
 
 interface Props { locale: Locale; path: string; }
 const { locale, path } = Astro.props;
@@ -18,7 +17,6 @@ const nav = [['/', 'nav.home'], ['/pricing', 'nav.pricing'], ['/download', 'nav.
         {nav.map(([href, key]) => <a href={translateUrl(href, locale)}>{t(locale, key)}</a>)}
         <a href={altPath(locale, path)} hreflang={locale === 'en' ? 'zh' : 'en'}>{t(locale, 'nav.langSwitch')}</a>
       </nav>
-      <ThemeToggle locale={locale} />
     </div>
   </div>
 </header>
