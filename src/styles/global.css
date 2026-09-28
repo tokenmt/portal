@@ -1,33 +1,14 @@
 /* ===== Theme tokens =====
- * data-theme attribute driven, set by the inline script in Base.astro.
- * Warm-orange accent derived from the logo (orange sun + cyan carets).
- * Dark is near-black; light is its degraded twin (glow -> subtle shadow).
+ * Dark-only (issue#368 redesign): deep blue-black base, brand orange/cyan.
+ * The old light palette and data-theme toggle were removed with the toggle.
  */
 :root {
-  --bg: #ffffff;
-  --surface: #f8fafc;
-  --fg: #0b0f19;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  /* #c2410c measures 5.18:1 on white — the old blue was 5.17:1, so this
-   * holds the same WCAG AA margin for body links. */
-  --accent: #c2410c;
-  --accent-rgb: 194, 65, 12;
-  /* CTA gradient's far end: white on #06b6d4 is only 2.43:1, so the light
-   * theme darkens it to 5.36:1. Dark theme keeps the brighter cyan. */
-  --accent-2: #0e7490;
-  --glow: 0 1px 3px rgba(var(--accent-rgb), 0.12);
-  --grid: none;
-
-  color-scheme: light;
-}
-
-[data-theme='dark'] {
-  --bg: #0a0f1c;
-  --surface: #111827;
+  --bg: #0a1526;
+  --surface: #101d33;
   --fg: #e6edf7;
   --muted: #94a3b8;
   --border: rgba(148, 163, 184, 0.16);
+  /* #fb923c on #0a1526 is ~8:1, #22d3ee ~7:1 — WCAG AA with margin. */
   --accent: #fb923c;
   --accent-rgb: 251, 146, 60;
   --accent-2: #22d3ee;
@@ -102,8 +83,10 @@ h2 { margin-top: 3rem; letter-spacing: -0.01em; }
   display: inline-block;
   padding: 0.6rem 1.4rem;
   border-radius: 8px;
+  /* Dark text on the bright gradient: #0a1526 on #fb923c→#22d3ee ≥4.5:1
+   * (white on this gradient was ~2:1, fixed in the issue#368 redesign). */
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #fff;
+  color: #0a1526;
   font-weight: 600;
   box-shadow: var(--glow);
 }
@@ -134,25 +117,6 @@ h2 { margin-top: 3rem; letter-spacing: -0.01em; }
 
 .site-nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1.4rem; align-items: center; }
 .nav-actions { display: flex; gap: 0.75rem; align-items: center; margin-left: auto; }
-
-.theme-toggle {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--fg);
-  cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
-}
-.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
-.theme-toggle svg { display: block; }
-/* Icon pair is swapped by data-theme; no JS re-render needed. */
-[data-theme='dark'] .icon-sun,
-:root:not([data-theme='dark']) .icon-moon { display: none; }
 
 /* ===== Table ===== */
 table { width: 100%; border-collapse: collapse; }
@@ -185,12 +149,4 @@ tbody tr:hover { background: var(--surface); }
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: none; }
   }
-}
-
-/* Suppress transitions on the frame where the theme flips, so the
- * whole page does not animate its colors. */
-[data-theme-transitioning] *,
-[data-theme-transitioning] *::before,
-[data-theme-transitioning] *::after {
-  transition: none !important;
 }
