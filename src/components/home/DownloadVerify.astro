@@ -12,7 +12,7 @@ const { locale } = Astro.props;
     RELEASES.map((r) => (r.sha256 || '·'.repeat(64)) + '  ' + r.name).join('\n')
   }</code></pre>
   <p class="muted">{t(locale, 'home.verifyNote')} · v{RELEASE_META.version}</p>
-  <p><a href={RELEASES_URL} rel="noopener">Verify the release ↗</a></p>
+  <p><a href={RELEASES_URL} rel="noopener">{t(locale, 'home.verifyLink')}</a></p>
 </section>
 <style>
   .verify-sha {

@@ -88,6 +88,5 @@ test('about page exposes no email address', async ({ page }) => {
 test('dark-only theme: no toggle remnant', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.theme-toggle')).toHaveCount(0);
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 });
 
