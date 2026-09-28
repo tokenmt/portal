@@ -1,0 +1,27 @@
+---
+import { t, type Locale } from '../../i18n';
+import { RELEASES, RELEASE_META, RELEASES_URL } from '../../data/downloads';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+---
+<section>
+  <h2>{t(locale, 'home.verifyTitle')}</h2>
+  <p class="muted">{t(locale, 'home.verifyIntro')}</p>
+  <pre class="verify-sha"><code>{
+    RELEASES.map((r) => (r.sha256 || '·'.repeat(64)) + '  ' + r.name).join('\n')
+  }</code></pre>
+  <p class="muted">{t(locale, 'home.verifyNote')} · v{RELEASE_META.version}</p>
+  <p><a href={RELEASES_URL} rel="noopener">Verify the release ↗</a></p>
+</section>
+<style>
+  .verify-sha {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    padding: 1rem;
+    font-size: 0.8rem;
+    line-height: 1.8;
+  }
+</style>

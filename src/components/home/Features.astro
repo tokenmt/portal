@@ -1,0 +1,29 @@
+---
+import { t, type Locale } from '../../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const features = [
+  ['home.f1.title', 'home.f1.desc'],
+  ['home.f2.title', 'home.f2.desc'],
+  ['home.f3.title', 'home.f3.desc'],
+  ['home.f4.title', 'home.f4.desc'],
+  ['home.f5.title', 'home.f5.desc'],
+  ['home.f6.title', 'home.f6.desc'],
+] as const;
+---
+<section>
+  <h2>{t(locale, 'home.featuresTitle')}</h2>
+  <div class="grid grid-features">
+    {features.map(([title, desc], i) => (
+      <div class="card">
+        <span class="feature-num muted">{String(i + 1).padStart(2, '0')}</span>
+        <h3>{t(locale, title)}</h3>
+        <p class="muted">{t(locale, desc)}</p>
+      </div>
+    ))}
+  </div>
+</section>
+<style>
+  .feature-num { display: block; font-variant-numeric: tabular-nums; letter-spacing: 0.1em; }
+</style>

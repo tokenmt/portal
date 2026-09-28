@@ -1,32 +1,14 @@
 ---
 import { t, type Locale } from '../../i18n';
-import { translateUrl as url } from '../../i18n/paths';
+import Hero from '../home/Hero.astro';
+import Features from '../home/Features.astro';
+import Gallery from '../home/Gallery.astro';
+import DownloadVerify from '../home/DownloadVerify.astro';
+
 interface Props { locale: Locale }
 const { locale } = Astro.props;
-const features = [['home.f1.title', 'home.f1.desc'], ['home.f2.title', 'home.f2.desc'], ['home.f3.title', 'home.f3.desc']] as const;
-const editions = ['community', 'team', 'saas', 'enterprise'] as const;
 ---
-<section>
-  <h1 class="fade-up">{t(locale, 'home.heroTitle')}</h1>
-  <p class="lead fade-up">{t(locale, 'home.heroTagline')}</p>
-  <p class="fade-up"><a class="cta" href={url('/download', locale)}>{t(locale, 'home.cta')}</a></p>
-</section>
-<section>
-  <h2>{t(locale, 'home.featuresTitle')}</h2>
-  <div class="grid grid-features">
-    {features.map(([title, desc]) => (
-      <div class="card">
-        <h3>{t(locale, title)}</h3>
-        <p class="muted">{t(locale, desc)}</p>
-      </div>
-    ))}
-  </div>
-</section>
-<section>
-  <h2>{t(locale, 'home.editionsTitle')}</h2>
-  <div class="grid grid-editions">
-    {editions.map((e) => (
-      <a class="card card-link" href={url('/pricing', locale)}>{t(locale, 'home.edition.' + e)}</a>
-    ))}
-  </div>
-</section>
+<Hero locale={locale} />
+<Features locale={locale} />
+<Gallery locale={locale} />
+<DownloadVerify locale={locale} />
