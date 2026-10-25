@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "presets": [
+    {
+      "id": "anthropic-official",
+      "label": { "zh": "Anthropic 官方", "en": "Anthropic Official" },
+      "slots": { "anthropic": "https://api.anthropic.com" }
+    },
+    {
+      "id": "openai-official",
+      "label": { "zh": "OpenAI 官方", "en": "OpenAI Official" },
+      "slots": { "openai": "https://api.openai.com" }
+    },
+    {
+      "id": "google-gemini",
+      "label": { "zh": "Google Gemini", "en": "Google Gemini" },
+      "slots": { "gemini": "https://generativelanguage.googleapis.com" }
+    },
+    {
+      "id": "volc-ark",
+      "label": { "zh": "火山方舟", "en": "Volcengine Ark" },
+      "slots": {
+        "openai": "https://ark.cn-beijing.volces.com/api/v3",
+        "seedance": "https://ark.cn-beijing.volces.com/api/v3"
+      },
+      "note": { "zh": "同 key 覆盖 OpenAI 兼容对话与 Seedance 视频生成；示例为北京区域端点，其他区域替换域名。", "en": "One key covers OpenAI-compatible chat and Seedance video; example is the Beijing region endpoint." }
+    },
+    {
+      "id": "minimax-cn",
+      "label": { "zh": "MiniMax 国内", "en": "MiniMax China" },
+      "slots": {
+        "openai": "https://api.minimaxi.com/v1",
+        "minimax": "https://api.minimaxi.com"
+      }
+    },
+    {
+      "id": "minimax-intl",
+      "label": { "zh": "MiniMax 国际", "en": "MiniMax International" },
+      "slots": {
+        "openai": "https://api.minimax.io/v1",
+        "minimax": "https://api.minimax.io"
+      }
+    }
+  ]
+}
