@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check:holidays": "node scripts/check-holiday-packs.mjs",
+    "check:data-packs": "node scripts/check-data-packs.mjs",
     "test": "playwright test"
   },
   "dependencies": {
