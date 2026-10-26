@@ -111,6 +111,14 @@ function load(dir, file) {
       const zh = p.label?.zh ?? '';
       const en = p.label?.en ?? '';
       if (zh.trim().length === 0 && en.trim().length === 0) fail(`${DIR}/presets.json`, `preset '${p.id}' label empty (zh and en)`);
+      // THUB-585 N3：note 若存在须为 {zh,en} 且至少一项非空——backend Option<I18nText>
+      // 反序列化失败会拒收整包，坏形状不能全绿发布
+      if (p.note !== undefined) {
+        const nz = typeof p.note === 'object' && p.note !== null ? (p.note.zh ?? '') : '';
+        const ne = typeof p.note === 'object' && p.note !== null ? (p.note.en ?? '') : '';
+        if (typeof p.note !== 'object' || p.note === null || Array.isArray(p.note)) fail(`${DIR}/presets.json`, `preset '${p.id}' note must be an object {zh,en}, got ${Array.isArray(p.note) ? 'array' : typeof p.note}`);
+        else if (nz.trim().length === 0 && ne.trim().length === 0) fail(`${DIR}/presets.json`, `preset '${p.id}' note empty (zh and en)`);
+      }
       for (const [k, v] of Object.entries(p.slots ?? {})) {
         if (!SLOT_KEYS.has(k)) continue; // D9：未知槽位忽略（旧 backend 兼容演进）
         if (typeof v !== 'string' || !/^https?:\/\//.test(v)) fail(`${DIR}/presets.json`, `preset '${p.id}' slot '${k}' must be http(s) URL, got '${v}'`);
