@@ -39,11 +39,12 @@
       },
       "slots": {
         "openai": "https://ark.cn-beijing.volces.com/api/v3",
-        "seedance": "https://ark.cn-beijing.volces.com/api/v3"
+        "seedance": "https://ark.cn-beijing.volces.com",
+        "anthropic": "https://ark.cn-beijing.volces.com/api/compatible"
       },
       "note": {
-        "zh": "同 key 覆盖 OpenAI 兼容对话与 Seedance 视频生成；示例为北京区域端点，其他区域替换域名。",
-        "en": "One key covers OpenAI-compatible chat and Seedance video; example is the Beijing region endpoint."
+        "zh": "同一 API Key 覆盖对话（OpenAI/Anthropic 兼容）与 Seedance 视频生成；Seedance 地址为裸域名，后端自动拼接任务路径。示例为北京区域端点。",
+        "en": "One key covers chat (OpenAI/Anthropic compatible) and Seedance video; the Seedance URL is a bare domain, the backend appends task paths. Beijing region shown."
       }
     },
     {
@@ -53,8 +54,13 @@
         "en": "MiniMax China"
       },
       "slots": {
-        "openai": "https://api.minimaxi.com/v1",
-        "minimax": "https://api.minimaxi.com"
+        "openai": "https://api.minimax.cn/v1",
+        "minimax": "https://api.minimax.cn",
+        "anthropic": "https://api.minimax.cn/anthropic"
+      },
+      "note": {
+        "zh": "官方域名已由 api.minimaxi.com 迁移至 api.minimax.cn；同 key 覆盖对话与视频生成。",
+        "en": "Official domain moved from api.minimaxi.com to api.minimax.cn; one key covers chat and video."
       }
     },
     {
@@ -65,7 +71,12 @@
       },
       "slots": {
         "openai": "https://api.minimax.io/v1",
-        "minimax": "https://api.minimax.io"
+        "minimax": "https://api.minimax.io",
+        "anthropic": "https://api.minimax.io/anthropic"
+      },
+      "note": {
+        "zh": "OpenAI 与 Anthropic 双协议兼容；同 key 覆盖对话与视频生成。",
+        "en": "OpenAI and Anthropic compatible; one key covers chat and video."
       }
     },
     {
@@ -75,11 +86,12 @@
         "en": "DeepSeek"
       },
       "slots": {
-        "openai": "https://api.deepseek.com"
+        "openai": "https://api.deepseek.com",
+        "anthropic": "https://api.deepseek.com/anthropic"
       },
       "note": {
-        "zh": "OpenAI 兼容端点；推荐 deepseek-flash（V4.1-Flash）或 deepseek-v4-pro。",
-        "en": "OpenAI-compatible endpoint; try deepseek-flash (V4.1-Flash) or deepseek-v4-pro."
+        "zh": "OpenAI 与 Anthropic 双协议兼容；推荐 deepseek-flash（V4.1-Flash）或 deepseek-v4-pro。",
+        "en": "OpenAI and Anthropic compatible; try deepseek-flash (V4.1-Flash) or deepseek-v4-pro."
       }
     },
     {
@@ -89,11 +101,12 @@
         "en": "Alibaba Bailian (Qwen)"
       },
       "slots": {
-        "openai": "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        "openai": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "anthropic": "https://dashscope.aliyuncs.com/apps/anthropic"
       },
       "note": {
-        "zh": "OpenAI 兼容模式；推荐 qwen-max / qwen-plus，企业用户可换业务空间专属域名。",
-        "en": "OpenAI-compatible mode; try qwen-max / qwen-plus. Enterprise users may switch to a workspace-specific domain."
+        "zh": "OpenAI 兼容模式与 Anthropic 兼容端点并存；推荐 qwen-max / qwen-plus，企业用户可换业务空间专属域名。",
+        "en": "OpenAI-compatible mode plus Anthropic-compatible endpoint; try qwen-max / qwen-plus. Enterprises may switch to workspace-specific domains."
       }
     },
     {
@@ -117,11 +130,12 @@
         "en": "Zhipu AI"
       },
       "slots": {
-        "openai": "https://open.bigmodel.cn/api/paas/v4"
+        "openai": "https://open.bigmodel.cn/api/paas/v4",
+        "anthropic": "https://open.bigmodel.cn/api/anthropic"
       },
       "note": {
-        "zh": "OpenAI SDK 兼容；推荐 glm-5.3（旗舰）或 glm-5-flash（性价比）。",
-        "en": "OpenAI SDK compatible; try glm-5.3 (flagship) or glm-5-flash (cost-effective)."
+        "zh": "OpenAI 与 Anthropic 双协议兼容（GLM Coding Plan 有独立端点体系，不适用本预设）；推荐 glm-5.3（旗舰）或 glm-5-flash（性价比）。",
+        "en": "OpenAI and Anthropic compatible (GLM Coding Plan uses separate endpoints, not covered here); try glm-5.3 or glm-5-flash."
       }
     },
     {
@@ -131,11 +145,12 @@
         "en": "Moonshot Kimi"
       },
       "slots": {
-        "openai": "https://api.moonshot.cn/v1"
+        "openai": "https://api.moonshot.cn/v1",
+        "anthropic": "https://api.moonshot.cn/anthropic"
       },
       "note": {
-        "zh": "OpenAI 兼容端点；默认 kimi-k3，亦可用 kimi-k2.6 / kimi-k2.7-code。",
-        "en": "OpenAI-compatible endpoint; default kimi-k3, also kimi-k2.6 / kimi-k2.7-code."
+        "zh": "OpenAI 与 Anthropic 双协议兼容；默认 kimi-k3，亦可用 kimi-k2.6 / kimi-k2.7-code。",
+        "en": "OpenAI and Anthropic compatible; default kimi-k3, also kimi-k2.6 / kimi-k2.7-code."
       }
     },
     {
