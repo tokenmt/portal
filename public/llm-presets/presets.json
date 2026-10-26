@@ -106,8 +106,8 @@
         "openai": "https://api.siliconflow.cn/v1"
       },
       "note": {
-        "zh": "OpenAI 兼容托管平台；推荐 DeepSeek-V4.1-Flash / DeepSeek-V4-Pro 等托管模型。",
-        "en": "OpenAI-compatible hosting platform; try DeepSeek-V4.1-Flash / DeepSeek-V4-Pro."
+        "zh": "OpenAI 兼容托管平台；模型 ID 带前缀，如 deepseek-ai/DeepSeek-V4.1-Flash、deepseek-ai/DeepSeek-V4-Pro。",
+        "en": "OpenAI-compatible hosting; model IDs are prefixed, e.g. deepseek-ai/DeepSeek-V4.1-Flash, deepseek-ai/DeepSeek-V4-Pro."
       }
     },
     {
