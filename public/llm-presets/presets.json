@@ -3,31 +3,55 @@
   "presets": [
     {
       "id": "anthropic-official",
-      "label": { "zh": "Anthropic 官方", "en": "Anthropic Official" },
-      "slots": { "anthropic": "https://api.anthropic.com" }
+      "label": {
+        "zh": "Anthropic 官方",
+        "en": "Anthropic Official"
+      },
+      "slots": {
+        "anthropic": "https://api.anthropic.com"
+      }
     },
     {
       "id": "openai-official",
-      "label": { "zh": "OpenAI 官方", "en": "OpenAI Official" },
-      "slots": { "openai": "https://api.openai.com" }
+      "label": {
+        "zh": "OpenAI 官方",
+        "en": "OpenAI Official"
+      },
+      "slots": {
+        "openai": "https://api.openai.com"
+      }
     },
     {
       "id": "google-gemini",
-      "label": { "zh": "Google Gemini", "en": "Google Gemini" },
-      "slots": { "gemini": "https://generativelanguage.googleapis.com" }
+      "label": {
+        "zh": "Google Gemini",
+        "en": "Google Gemini"
+      },
+      "slots": {
+        "gemini": "https://generativelanguage.googleapis.com"
+      }
     },
     {
       "id": "volc-ark",
-      "label": { "zh": "火山方舟", "en": "Volcengine Ark" },
+      "label": {
+        "zh": "火山方舟",
+        "en": "Volcengine Ark"
+      },
       "slots": {
         "openai": "https://ark.cn-beijing.volces.com/api/v3",
         "seedance": "https://ark.cn-beijing.volces.com/api/v3"
       },
-      "note": { "zh": "同 key 覆盖 OpenAI 兼容对话与 Seedance 视频生成；示例为北京区域端点，其他区域替换域名。", "en": "One key covers OpenAI-compatible chat and Seedance video; example is the Beijing region endpoint." }
+      "note": {
+        "zh": "同 key 覆盖 OpenAI 兼容对话与 Seedance 视频生成；示例为北京区域端点，其他区域替换域名。",
+        "en": "One key covers OpenAI-compatible chat and Seedance video; example is the Beijing region endpoint."
+      }
     },
     {
       "id": "minimax-cn",
-      "label": { "zh": "MiniMax 国内", "en": "MiniMax China" },
+      "label": {
+        "zh": "MiniMax 国内",
+        "en": "MiniMax China"
+      },
       "slots": {
         "openai": "https://api.minimaxi.com/v1",
         "minimax": "https://api.minimaxi.com"
@@ -35,10 +59,97 @@
     },
     {
       "id": "minimax-intl",
-      "label": { "zh": "MiniMax 国际", "en": "MiniMax International" },
+      "label": {
+        "zh": "MiniMax 国际",
+        "en": "MiniMax International"
+      },
       "slots": {
         "openai": "https://api.minimax.io/v1",
         "minimax": "https://api.minimax.io"
+      }
+    },
+    {
+      "id": "deepseek",
+      "label": {
+        "zh": "DeepSeek",
+        "en": "DeepSeek"
+      },
+      "slots": {
+        "openai": "https://api.deepseek.com"
+      },
+      "note": {
+        "zh": "OpenAI 兼容端点；推荐 deepseek-flash（V4.1-Flash）或 deepseek-v4-pro。",
+        "en": "OpenAI-compatible endpoint; try deepseek-flash (V4.1-Flash) or deepseek-v4-pro."
+      }
+    },
+    {
+      "id": "aliyun-bailian",
+      "label": {
+        "zh": "阿里百炼（Qwen）",
+        "en": "Alibaba Bailian (Qwen)"
+      },
+      "slots": {
+        "openai": "https://dashscope.aliyuncs.com/compatible-mode/v1"
+      },
+      "note": {
+        "zh": "OpenAI 兼容模式；推荐 qwen-max / qwen-plus，企业用户可换业务空间专属域名。",
+        "en": "OpenAI-compatible mode; try qwen-max / qwen-plus. Enterprise users may switch to a workspace-specific domain."
+      }
+    },
+    {
+      "id": "siliconflow",
+      "label": {
+        "zh": "硅基流动",
+        "en": "SiliconFlow"
+      },
+      "slots": {
+        "openai": "https://api.siliconflow.cn/v1"
+      },
+      "note": {
+        "zh": "OpenAI 兼容托管平台；推荐 DeepSeek-V4.1-Flash / DeepSeek-V4-Pro 等托管模型。",
+        "en": "OpenAI-compatible hosting platform; try DeepSeek-V4.1-Flash / DeepSeek-V4-Pro."
+      }
+    },
+    {
+      "id": "zhipu",
+      "label": {
+        "zh": "智谱 AI",
+        "en": "Zhipu AI"
+      },
+      "slots": {
+        "openai": "https://open.bigmodel.cn/api/paas/v4"
+      },
+      "note": {
+        "zh": "OpenAI SDK 兼容；推荐 glm-5.3（旗舰）或 glm-5-flash（性价比）。",
+        "en": "OpenAI SDK compatible; try glm-5.3 (flagship) or glm-5-flash (cost-effective)."
+      }
+    },
+    {
+      "id": "moonshot",
+      "label": {
+        "zh": "月之暗面 Kimi",
+        "en": "Moonshot Kimi"
+      },
+      "slots": {
+        "openai": "https://api.moonshot.cn/v1"
+      },
+      "note": {
+        "zh": "OpenAI 兼容端点；默认 kimi-k3，亦可用 kimi-k2.6 / kimi-k2.7-code。",
+        "en": "OpenAI-compatible endpoint; default kimi-k3, also kimi-k2.6 / kimi-k2.7-code."
+      }
+    },
+    {
+      "id": "ollama-local",
+      "label": {
+        "zh": "Ollama 本地",
+        "en": "Ollama Local"
+      },
+      "slots": {
+        "openai": "http://127.0.0.1:11434/v1"
+      },
+      "note": {
+        "zh": "仅当 Ollama 与 TokenHub backend 同机部署（自托管/盒子形态）时可用；模型名按已 pull 的模型填写。",
+        "en": "Only works when Ollama runs on the same host as the TokenHub backend (self-hosted/box). Use a model name you have pulled."
       }
     }
   ]
