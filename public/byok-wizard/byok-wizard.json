@@ -1,0 +1,43 @@
+{
+  "pack": "byok-wizard",
+  "version": "1.1.0",
+  "vendors": [
+    {
+      "id": "deepseek-openai",
+      "name": "DeepSeek",
+      "entry_url": "https://platform.deepseek.com/api_keys",
+      "steps": [
+        {
+          "text": {
+            "zh_CN": "配置向导：如出现「绑定邮箱」等弹窗请先关闭，然后在左侧菜单点击「API keys」",
+            "zh_HK": "配置嚮導：如出現「綁定郵箱」等彈窗請先關閉，然後在左側菜單點擊「API keys」",
+            "en_US": "Setup wizard: close any popup (e.g. email binding) first, then click 'API keys' in the left menu"
+          },
+          "highlight_selector": "a.ds-menu-option[href*='api_keys']"
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：点击「创建 API key」按钮",
+            "zh_HK": "配置嚮導：點擊「創建 API key」按鈕",
+            "en_US": "Setup wizard: click the 'Create API key' button"
+          },
+          "highlight_selector": ".ds-button--primary.ds-button--filled"
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：复制生成的 API key（平台只显示一次）；系统未自动读取时请回到控制台手动粘贴",
+            "zh_HK": "配置嚮導：複製生成的 API key（平台只顯示一次）；系統未自動讀取時請回到控制台手動粘貼",
+            "en_US": "Setup wizard: copy the generated API key (shown only once); paste it manually in the console if not auto-detected"
+          },
+          "highlight_selector": null
+        }
+      ],
+      "selectors": ["[data-testid='api-key']", "code.api-key"],
+      "validate": {
+        "protocol_slot": "openai",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-chat"
+      }
+    }
+  ]
+}
