@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -45,7 +45,8 @@
             "zh_HK": "配置嚮導：關閉「綁定郵箱」彈窗——點擊彈窗右上角 ✕",
             "en_US": "Setup wizard: close the email-binding popup — click the ✕ at its top-right"
           },
-          "highlight_selector": ".ds-modal .ds-button--icon"
+          "highlight_selector": ".ds-modal .ds-button--icon",
+          "match_text": "绑定邮箱"
         }
       ],
       "selectors": [
