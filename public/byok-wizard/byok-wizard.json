@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -29,7 +29,8 @@
             "zh_HK": "配置嚮導：點擊彈窗中的「複製」按鈕將 API key 複製到剪貼板，然後點擊字幕條右側的「回到 TokenMate」返回控制台",
             "en_US": "Setup wizard: click 'Copy' in the popup to copy the API key, then click 'Back to TokenMate' on the right of the subtitle bar to return"
           },
-          "highlight_selector": null
+          "highlight_selector": ".ds-modal .ds-button--filled",
+          "match_text": "sk-"
         },
         {
           "text": {
@@ -50,7 +51,8 @@
         }
       ],
       "selectors": [
-        "[data-testid='api-key']",
+        "span.ds-copyable-text-line__text",
+        "[data-testid=api-key]",
         "code.api-key"
       ],
       "validate": {
