@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -34,20 +34,12 @@
         },
         {
           "text": {
-            "zh_CN": "配置向导：先关闭顶部通知——点击其右侧 ✕ 或「知道了」",
-            "zh_HK": "配置嚮導：先關閉頂部通知——點擊其右側 ✕ 或「知道了」",
-            "en_US": "Setup wizard: dismiss the top notice first — click its ✕ or 'Got it'"
-          },
-          "highlight_selector": ".ds-banner__close-wrapper .ds-button--icon"
-        },
-        {
-          "text": {
             "zh_CN": "配置向导：关闭「绑定邮箱」弹窗——点击弹窗右上角 ✕",
             "zh_HK": "配置嚮導：關閉「綁定郵箱」彈窗——點擊彈窗右上角 ✕",
             "en_US": "Setup wizard: close the email-binding popup — click the ✕ at its top-right"
           },
           "highlight_selector": ".ds-modal .ds-button--icon",
-          "match_text": "绑定邮箱"
+          "match_text": ["绑定邮箱", "綁定郵箱", "Bind Email"]
         }
       ],
       "selectors": [

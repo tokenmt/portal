@@ -45,7 +45,8 @@ const rs = readFileSync(opt.cdp, 'utf8');
 const m = rs.match(/const OVERLAY_JS: &str = r#"([\s\S]*?)"#;/);
 if (!m) { console.error('未能从 cdp.rs 提取 OVERLAY_JS'); process.exit(1); }
 const overlayJs = m[1];
-const steps = vendor.steps.map((s) => ({ text: s.text.zh_CN, highlight: s.highlight_selector, match: s.match_text ?? null }));
+const normMatch = (m) => (Array.isArray(m) ? m : m ? [m] : []);
+const steps = vendor.steps.map((s) => ({ text: s.text.zh_CN, highlight: s.highlight_selector, match: s.match_text ? normMatch(s.match_text) : [] }));
 const params = JSON.stringify({ steps, remove: false });
 const injectExpr = overlayJs.replace('__PARAMS__', params);
 // probe 表达式（backend build_probe_expression 同款）
@@ -70,22 +71,30 @@ await page.evaluate(injectExpr);
 
 // 逐步骤校验（与 backend JS 同判定：selector 命中 + match_text 存在 → 最后命中者胜）
 const report = await page.evaluate(({ steps }) => {
-  const bodyText = document.body ? document.body.textContent : '';
   const stepReport = steps.map((s, i) => {
     const r = { step: i + 1, text: (s.text || '').slice(0, 40), highlight: s.highlight, hit: false, matchOk: null, count: 0, rect: null };
     if (!s.highlight) { r.note = '无 selector（纯文案步骤）'; return r; }
     const els = document.querySelectorAll(s.highlight);
     r.count = els.length;
     r.hit = els.length > 0;
-    if (s.match) r.matchOk = bodyText.includes(s.match) ? 'pass' : 'FAIL（页面文本不含）';
+    if (s.match && s.match.length && els.length) {
+      const scope = els[0].closest('[role="dialog"],dialog,.ds-modal,.ds-banner') || document.body;
+      const st = scope.textContent || '';
+      r.matchOk = s.match.some((t) => st.includes(t)) ? 'pass' : `FAIL（容器内文本不含 [${s.match.join(', ')}]）`;
+    }
     if (r.hit) { const b = els[0].getBoundingClientRect(); r.rect = `t=${Math.round(b.top)} l=${Math.round(b.left)} ${Math.round(b.width)}x${Math.round(b.height)}`; }
     return r;
   });
   let cur = -1;
   steps.forEach((s, i) => {
     if (!s.highlight) return;
-    if (!document.querySelector(s.highlight)) return;
-    if (s.match && (!bodyText || !bodyText.includes(s.match))) return;
+    const el = document.querySelector(s.highlight);
+    if (!el) return;
+    if (s.match && s.match.length) {
+      const scope = el.closest('[role="dialog"],dialog,.ds-modal,.ds-banner') || document.body;
+      const st = scope.textContent || '';
+      if (!s.match.some((t) => st.includes(t))) return;
+    }
     cur = i;
   });
   const bar = document.getElementById('__thub_byok_bar');
