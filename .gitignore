@@ -3,3 +3,7 @@ dist/
 .astro/
 test-results/
 playwright-report/
+
+# wizard-check 产物
+wizard-check.png
+wizard-check-report.json
