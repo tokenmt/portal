@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -12,8 +12,7 @@
             "zh_CN": "配置向导：请先登录 DeepSeek 账号（手机号验证码登录）",
             "zh_HK": "配置嚮導：請先登錄 DeepSeek 賬號（手機號驗證碼登錄）",
             "en_US": "Setup wizard: sign in to your DeepSeek account first (phone + verification code)"
-          },
-          "highlight_selector": "input[type='tel']"
+          }
         },
         {
           "text": {
