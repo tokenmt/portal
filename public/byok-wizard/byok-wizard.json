@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -20,8 +20,7 @@
             "zh_HK": "配置嚮導：在左側菜單點擊「API keys」進入密鑰頁",
             "en_US": "Setup wizard: click 'API keys' in the left menu"
           },
-          "highlight_selector": "a.ds-menu-option[href*='api_keys']",
-          "url_includes": "api_keys"
+          "highlight_selector": "a.ds-menu-option[href*='api_keys']"
         },
         {
           "text": {
