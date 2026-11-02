@@ -1,12 +1,20 @@
 {
   "pack": "byok-wizard",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "vendors": [
     {
       "id": "deepseek-openai",
       "name": "DeepSeek",
       "entry_url": "https://platform.deepseek.com/api_keys",
       "steps": [
+        {
+          "text": {
+            "zh_CN": "配置向导：请先登录 DeepSeek 账号（手机号验证码登录）",
+            "zh_HK": "配置嚮導：請先登錄 DeepSeek 賬號（手機號驗證碼登錄）",
+            "en_US": "Setup wizard: sign in to your DeepSeek account first (phone + verification code)"
+          },
+          "highlight_selector": "input[type='tel']"
+        },
         {
           "text": {
             "zh_CN": "配置向导：在左侧菜单点击「API keys」进入密钥页",
