@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -20,7 +20,8 @@
             "zh_HK": "配置嚮導：在左側菜單點擊「API keys」進入密鑰頁",
             "en_US": "Setup wizard: click 'API keys' in the left menu"
           },
-          "highlight_selector": "a.ds-menu-option[href*='api_keys']"
+          "highlight_selector": "a.ds-menu-option[href*='api_keys']",
+          "url_includes": "api_keys"
         },
         {
           "text": {
@@ -28,7 +29,8 @@
             "zh_HK": "配置嚮導：點擊「創建 API key」按鈕",
             "en_US": "Setup wizard: click the 'Create API key' button"
           },
-          "highlight_selector": ".ds-button--primary.ds-button--filled"
+          "highlight_selector": ".ds-button--primary.ds-button--filled",
+          "url_includes": "api_keys"
         },
         {
           "text": {
@@ -37,7 +39,8 @@
             "en_US": "Setup wizard: click 'Copy' in the popup to copy the API key, then click 'Back to TokenMate' on the right of the subtitle bar to return"
           },
           "highlight_selector": ".ds-modal .ds-button--filled",
-          "match_text": "sk-"
+          "match_text": "sk-",
+          "url_includes": "api_keys"
         },
         {
           "text": {
@@ -46,7 +49,12 @@
             "en_US": "Setup wizard: close the email-binding popup — click the ✕ at its top-right"
           },
           "highlight_selector": ".ds-modal .ds-button--icon",
-          "match_text": ["绑定邮箱", "綁定郵箱", "Bind Email"]
+          "match_text": [
+            "绑定邮箱",
+            "綁定郵箱",
+            "Bind Email"
+          ],
+          "url_includes": "api_keys"
         }
       ],
       "selectors": [
