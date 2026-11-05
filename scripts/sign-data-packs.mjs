@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// THUB-583: 对 public/holidays 与 public/llm-presets 的数据包文件产出 Ed25519 签名
+// THUB-583: 对 public/holidays、public/llm-presets 与 public/byok-wizard 的数据包文件产出 Ed25519 签名
 //（<file>.sig = 原始 64 字节，wire 形态对齐 backend signed_pack.rs fetch_signed_bytes）。
 // 私钥：secrets/pack-signing.key.hex（hex 编码 32 字节 seed，gitignored，勿入库）。
 // 用法：node scripts/sign-data-packs.mjs [--key <path>] [file...]
@@ -18,8 +18,8 @@ for (let i = 0; i < args.length; i++) {
   else files.push(args[i]);
 }
 if (!keyPath) {
-  // 默认：portal 同级主仓 secrets/（sibling 布局）；可用 --key 覆盖
-  keyPath = resolve(ROOT, '..', '..', 'secrets', 'pack-signing.key.hex');
+  // 默认：主仓 secrets/（portal 在 tokenhub 内一级；issue#680 修正原 '..','..' 越级路径）；可用 --key 覆盖
+  keyPath = resolve(ROOT, '..', 'secrets', 'pack-signing.key.hex');
 }
 if (!existsSync(keyPath)) {
   console.error(`sign-data-packs: signing key not found: ${keyPath}（--key 指定或放 secrets/pack-signing.key.hex）`);
@@ -38,7 +38,7 @@ const targets = [];
 if (files.length) {
   targets.push(...files.map((f) => resolve(process.cwd(), f)));
 } else {
-  for (const dir of ['holidays', 'llm-presets']) {
+  for (const dir of ['holidays', 'llm-presets', 'byok-wizard']) {
     const d = join(ROOT, 'public', dir);
     if (!existsSync(d)) continue;
     targets.push(join(d, 'manifest.json'));
