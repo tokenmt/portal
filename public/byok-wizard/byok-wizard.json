@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -33,9 +33,23 @@
         },
         {
           "text": {
-            "zh_CN": "配置向导：点击弹窗中的「复制」按钮将 API key 复制到剪贴板，然后点击字幕条右侧的「回到 TokenMate」返回控制台",
-            "zh_HK": "配置嚮導：點擊彈窗中的「複製」按鈕將 API key 複製到剪貼板，然後點擊字幕條右側的「回到 TokenMate」返回控制台",
-            "en_US": "Setup wizard: click 'Copy' in the popup to copy the API key, then click 'Back to TokenMate' on the right of the subtitle bar to return"
+            "zh_CN": "配置向导：请输入名称，如：tokenmate，然后点击「创建」",
+            "zh_HK": "配置嚮導：請輸入名稱，如：tokenmate，然後點擊「創建」",
+            "en_US": "Setup wizard: enter a name, e.g. tokenmate, then click 'Create'"
+          },
+          "highlight_selector": ".ds-modal .ds-button--filled",
+          "match_text": [
+            "创建",
+            "創建",
+            "Create"
+          ],
+          "url_includes": "api_keys"
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：请点击弹窗中的「复制」按钮，会自动跳回 TokenMate",
+            "zh_HK": "配置嚮導：請點擊彈窗中的「複製」按鈕，會自動跳回 TokenMate",
+            "en_US": "Setup wizard: click 'Copy' in the popup and you'll be taken back to TokenMate automatically"
           },
           "highlight_selector": ".ds-modal .ds-button--filled",
           "match_text": "sk-",

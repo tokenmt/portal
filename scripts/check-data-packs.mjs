@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// THUB-583: 校验 public/holidays 与 public/llm-presets 两类签名数据包是否符合 backend schema
+// THUB-583: 校验 public/holidays、public/llm-presets 与 public/byok-wizard 三类签名数据包是否符合 backend schema
 //（backend crates/server/src/services/data_packs/{holidays,llm_presets}.rs 的解析规则）。
 // 取代 check-holiday-packs.mjs（issue#228）。用法：node scripts/check-data-packs.mjs
 // 退出码 0 = 全部通过；非 0 = 有失败（fail-loud）。
@@ -135,8 +135,8 @@ function load(dir, file) {
   }
 }
 
-// ── byok-wizard（issue#681：镜像 backend parse_byok_wizard 拒绝项，签名前置门；
-//    比 backend 更严一处：base_url 仅 https——loopback http 例外仅 backend 测试夹具适用）──
+// ── byok-wizard（issue#680：校验项与 backend parse_byok_wizard 硬拒项全量对齐，
+//    坏形状不能全绿发布——backend 反序列化失败会拒收整包）──
 {
   const DIR = 'byok-wizard';
   const dir = join(ROOT, 'public', DIR);
@@ -145,53 +145,53 @@ function load(dir, file) {
   } else {
     const manifest = load(DIR, 'manifest.json');
     if (manifest.raw.length > MAX_MANIFEST_BYTES) fail(`${DIR}/manifest.json`, `exceeds ${MAX_MANIFEST_BYTES} bytes`);
-    if (typeof manifest.json.schema_version !== 'number') fail(`${DIR}/manifest.json`, 'schema_version missing (backend u32 required)');
     if (manifest.json.schema_version > 1) fail(`${DIR}/manifest.json`, `schema_version ${manifest.json.schema_version} > 1`);
     if (!SEMVER_RE.test(manifest.json.version)) fail(`${DIR}/manifest.json`, `version '${manifest.json.version}' not semver`);
 
     const pack = load(DIR, 'byok-wizard.json');
     if (pack.raw.length > MAX_PAYLOAD_BYTES) fail(`${DIR}/byok-wizard.json`, `exceeds ${MAX_PAYLOAD_BYTES} bytes`);
-    if (pack.json.pack !== 'byok-wizard') fail(`${DIR}/byok-wizard.json`, `pack field must be 'byok-wizard', got '${pack.json.pack}'`);
-    if (!SEMVER_RE.test(pack.json.version)) fail(`${DIR}/byok-wizard.json`, `version '${pack.json.version}' not semver`);
-    if (pack.json.version !== manifest.json.version) fail(`${DIR}/byok-wizard.json`, `payload version != manifest version`);
-    if (!Array.isArray(pack.json.vendors) || pack.json.vendors.length === 0) fail(`${DIR}/byok-wizard.json`, 'vendors must be non-empty array');
-    const ID_RE = /^[A-Za-z0-9_-]+$/;
-    const SLOT_RE = /^(openai|anthropic)$/;
-    const httpsUrl = (u) => typeof u === 'string' && u.startsWith('https://');
-    const seenVendors = new Set();
+    if (SEMVER_RE.test(String(pack.json.version)) === false) fail(`${DIR}/byok-wizard.json`, `version '${pack.json.version}' not semver`);
+    if (manifest.json.version !== pack.json.version) fail(`${DIR}/byok-wizard.json`, `version '${pack.json.version}' != manifest '${manifest.json.version}'`);
+    if (typeof pack.json.pack !== 'string' || pack.json.pack.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `pack field empty`);
+    if (!Array.isArray(pack.json.vendors)) fail(`${DIR}/byok-wizard.json`, `vendors missing (backend Vec<WizardVendor> no default)`);
+    const VENDOR_ID_RE = /^[A-Za-z0-9_-]+$/;
+    const seenIds = new Set();
     for (const v of pack.json.vendors ?? []) {
-      const tag = `${DIR}/byok-wizard.json vendor '${v?.id ?? '<missing>'}'`;
-      if (typeof v?.id !== 'string' || v.id.trim().length === 0) fail(tag, 'empty id');
-      else if (!ID_RE.test(v.id)) fail(tag, `id chars invalid`);
-      else if (seenVendors.has(v.id)) fail(tag, 'duplicate id');
-      seenVendors.add(v.id);
-      if (!httpsUrl(v?.entry_url)) fail(tag, 'entry_url must be https');
-      if (!Array.isArray(v?.selectors) || v.selectors.length === 0) fail(tag, 'selectors empty');
-      if (!SLOT_RE.test(v?.validate?.protocol_slot ?? '')) fail(tag, `protocol_slot '${v?.validate?.protocol_slot}' not supported (openai|anthropic)`);
-      if (!httpsUrl(v?.validate?.base_url)) fail(tag, 'validate.base_url must be https');
-      if (typeof v?.validate?.model !== 'string' || v.validate.model.trim().length === 0) fail(tag, 'validate.model empty');
-      for (const [i, s] of (v?.steps ?? []).entries()) {
-        for (const [k, locale] of [['zh_CN', s?.text?.zh_CN], ['zh_HK', s?.text?.zh_HK], ['en_US', s?.text?.en_US]]) {
-          if (typeof locale !== 'string' || locale.trim().length === 0) fail(`${tag} step[${i}]`, `text.${k} empty`);
+      if (typeof v.name !== 'string' || v.name.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' name empty`);
+      if (!Array.isArray(v.steps)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' steps missing (backend Vec<WizardStep> no default)`);
+      if (typeof v.id !== 'string' || v.id.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `empty vendor id`);
+      else if (!VENDOR_ID_RE.test(v.id)) fail(`${DIR}/byok-wizard.json`, `vendor id '${v.id}' invalid (ascii alnum - _)`);
+      else if (seenIds.has(v.id)) fail(`${DIR}/byok-wizard.json`, `duplicate vendor id '${v.id}'`);
+      else seenIds.add(v.id);
+      if (!/^https:\/\//.test(v.entry_url ?? '')) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' entry_url must be https`);
+      if (!Array.isArray(v.selectors) || v.selectors.length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' selectors empty`);
+      else if (v.selectors.some((x) => typeof x !== 'string')) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' selectors must be string[]`);
+      for (const s of v.steps ?? []) {
+        for (const lang of ['zh_CN', 'zh_HK', 'en_US']) {
+          if (typeof s.text?.[lang] !== 'string' || s.text[lang].trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step text.${lang} empty`);
         }
-        for (const [field, val] of [['highlight_selector', s?.highlight_selector], ['url_includes', s?.url_includes]]) {
-          if (val !== undefined && (typeof val !== 'string' || val.trim().length === 0)) fail(`${tag} step[${i}]`, `${field} must be non-empty string`);
+        for (const [k, val] of [['highlight_selector', s.highlight_selector], ['url_includes', s.url_includes]]) {
+          if (val !== undefined && (typeof val !== 'string' || val.trim().length === 0)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step ${k} empty string`);
         }
-        if (s?.match_text !== undefined) {
-          const texts = Array.isArray(s.match_text) ? s.match_text : [s.match_text];
-          for (const t of texts) {
-            if (typeof t !== 'string' || t.trim().length === 0) fail(`${tag} step[${i}]`, 'match_text has empty candidate');
-          }
-        }
+        const mt = s.match_text;
+        const mts = Array.isArray(mt) ? mt : mt !== undefined ? [mt] : [];
+        if (mts.some((t) => typeof t !== 'string' || t.trim().length === 0)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step match_text empty string`);
       }
+      const val = v.validate ?? {};
+      if (!['openai', 'anthropic'].includes(val.protocol_slot)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' protocol_slot '${val.protocol_slot}' not supported (openai|anthropic)`);
+      // issue#664 口径：host 级 loopback 判定（前缀正则会被 127.0.0.1.evil.com 绕过）
+      let baseOk = false;
+      try { const u = new URL(val.base_url ?? ''); baseOk = u.protocol === 'https:' || (u.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]', '::1'].includes(u.hostname)); } catch { baseOk = false; }
+      if (!baseOk) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' validate.base_url must be https (or loopback http host)`);
+      if (typeof val.model !== 'string' || val.model.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' validate.model empty`);
     }
     for (const f of ['manifest.json', 'byok-wizard.json']) {
       const sig = join(dir, `${f}.sig`);
       if (!existsSync(sig)) fail(`${DIR}/${f}.sig`, 'missing (backend requests <file>.sig; 404 aborts fetch)');
       else if (statSync(sig).size !== 64) fail(`${DIR}/${f}.sig`, `must be 64 raw bytes, got ${statSync(sig).size}`);
     }
-    if (!errors.some((e) => e.startsWith(`${DIR}/`))) {
-      console.log(`check-data-packs: byok-wizard OK (${seenVendors.size} vendors)`);
+    if (!errors.some((e) => e.startsWith('byok-wizard/'))) {
+      console.log(`check-data-packs: byok-wizard OK (${seenIds.size} vendors)`);
     }
   }
 }

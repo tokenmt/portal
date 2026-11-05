@@ -42,12 +42,14 @@ if (!vendor) { console.error(`vendor '${opt.vendor}' 不存在`); process.exit(1
 
 // 从 backend cdp.rs 提取 OVERLAY_JS（与线上一字不差）
 const rs = readFileSync(opt.cdp, 'utf8');
-const m = rs.match(/const OVERLAY_JS: &str = r#+"([\s\S]*?)"#+;/);
+// issue#680：正则对齐 cdp.rs r## 定界符（issue#662 D7 引入 r## 后本台静默坏掉）；
+// params 补 keys/url 与 backend build_overlay_expression 形状对齐（OVERLAY_JS 据此 arm）。
+const m = rs.match(/const OVERLAY_JS: &str = r##"([\s\S]*?)"##;/);
 if (!m) { console.error('未能从 cdp.rs 提取 OVERLAY_JS'); process.exit(1); }
 const overlayJs = m[1];
 const normMatch = (m) => (Array.isArray(m) ? m : m ? [m] : []);
-const steps = vendor.steps.map((s) => ({ text: s.text.zh_CN, highlight: s.highlight_selector, match: s.match_text ? normMatch(s.match_text) : [] }));
-const params = JSON.stringify({ steps, remove: false });
+const steps = vendor.steps.map((s) => ({ text: s.text.zh_CN, highlight: s.highlight_selector, match: s.match_text ? normMatch(s.match_text) : [], url: s.url_includes }));
+const params = JSON.stringify({ steps, keys: vendor.selectors, remove: false });
 const injectExpr = overlayJs.replace('__PARAMS__', params);
 // probe 表达式（backend build_probe_expression 同款）
 const selArr = vendor.selectors.map((s) => JSON.stringify(s)).join(',');
@@ -74,6 +76,7 @@ const report = await page.evaluate(({ steps }) => {
   const stepReport = steps.map((s, i) => {
     const r = { step: i + 1, text: (s.text || '').slice(0, 40), highlight: s.highlight, hit: false, matchOk: null, count: 0, rect: null };
     if (!s.highlight) { r.note = '无 selector（纯文案步骤）'; return r; }
+    if (s.url && !location.href.includes(s.url)) { r.note = 'url 门未过（本页不激活）'; return r; }
     const els = document.querySelectorAll(s.highlight);
     r.count = els.length;
     r.hit = els.length > 0;
@@ -88,6 +91,7 @@ const report = await page.evaluate(({ steps }) => {
   let cur = -1;
   steps.forEach((s, i) => {
     if (!s.highlight) return;
+    if (s.url && !location.href.includes(s.url)) return;
     const el = document.querySelector(s.highlight);
     if (!el) return;
     if (s.match && s.match.length) {
