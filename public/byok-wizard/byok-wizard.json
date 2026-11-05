@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -79,6 +79,94 @@
         "protocol_slot": "openai",
         "base_url": "https://api.deepseek.com",
         "model": "deepseek-chat"
+      }
+    },
+    {
+      "id": "zhipu-openai",
+      "name": "智谱GLM",
+      "entry_url": "https://bigmodel.cn/apikey/platform",
+      "steps": [
+        {
+          "text": {
+            "zh_CN": "配置向导：请先登录智谱（bigmodel.cn）账号",
+            "zh_HK": "配置嚮導：請先登錄智譜（bigmodel.cn）賬號",
+            "en_US": "Setup wizard: sign in to your Zhipu (bigmodel.cn) account first"
+          }
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：点击「新建API Key」按钮创建新密钥（完整 key 仅创建时展示一次）",
+            "zh_HK": "配置嚮導：點擊「新建API Key」按鈕創建新密鑰（完整 key 僅創建時展示一次）",
+            "en_US": "Setup wizard: click '新建API Key' to create a new key (the full key is shown only once at creation)"
+          },
+          "highlight_selector": "button.el-button--primary:has(.icon-add)",
+          "url_includes": "apikey"
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：系统已自动读取您的 API key（无需手动复制）。点击「我已妥善保存」关闭弹窗，然后点击字幕条右侧的「回到 TokenMate」返回控制台",
+            "zh_HK": "配置嚮導：系統已自動讀取您的 API key（無需手動複製）。點擊「我已妥善保存」關閉彈窗，然後點擊字幕條右側的「回到 TokenMate」返回控制台",
+            "en_US": "Setup wizard: your API key has been captured automatically (no manual copy needed). Click '我已妥善保存' to close the popup, then click '回到 TokenMate' on the subtitle bar to return"
+          },
+          "highlight_selector": ".api-key-created-dialog .confirm-btn",
+          "match_text": [
+            "API Key"
+          ],
+          "url_includes": "apikey"
+        }
+      ],
+      "selectors": [
+        ".api-key-created-dialog .key-field input.field-value",
+        ".api-key-created-dialog input.field-value"
+      ],
+      "validate": {
+        "protocol_slot": "openai",
+        "base_url": "https://open.bigmodel.cn/api/paas/v4",
+        "model": "glm-4-flash-250414"
+      }
+    },
+    {
+      "id": "zhipu-anthropic",
+      "name": "智谱GLM",
+      "entry_url": "https://bigmodel.cn/apikey/platform",
+      "steps": [
+        {
+          "text": {
+            "zh_CN": "配置向导：请先登录智谱（bigmodel.cn）账号",
+            "zh_HK": "配置嚮導：請先登錄智譜（bigmodel.cn）賬號",
+            "en_US": "Setup wizard: sign in to your Zhipu (bigmodel.cn) account first"
+          }
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：点击「新建API Key」按钮创建新密钥（完整 key 仅创建时展示一次）",
+            "zh_HK": "配置嚮導：點擊「新建API Key」按鈕創建新密鑰（完整 key 僅創建時展示一次）",
+            "en_US": "Setup wizard: click '新建API Key' to create a new key (the full key is shown only once at creation)"
+          },
+          "highlight_selector": "button.el-button--primary:has(.icon-add)",
+          "url_includes": "apikey"
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：系统已自动读取您的 API key（无需手动复制）。点击「我已妥善保存」关闭弹窗，然后点击字幕条右侧的「回到 TokenMate」返回控制台",
+            "zh_HK": "配置嚮導：系統已自動讀取您的 API key（無需手動複製）。點擊「我已妥善保存」關閉彈窗，然後點擊字幕條右側的「回到 TokenMate」返回控制台",
+            "en_US": "Setup wizard: your API key has been captured automatically (no manual copy needed). Click '我已妥善保存' to close the popup, then click '回到 TokenMate' on the subtitle bar to return"
+          },
+          "highlight_selector": ".api-key-created-dialog .confirm-btn",
+          "match_text": [
+            "API Key"
+          ],
+          "url_includes": "apikey"
+        }
+      ],
+      "selectors": [
+        ".api-key-created-dialog .key-field input.field-value",
+        ".api-key-created-dialog input.field-value"
+      ],
+      "validate": {
+        "protocol_slot": "anthropic",
+        "base_url": "https://open.bigmodel.cn/api/anthropic",
+        "model": "glm-4-flash-250414"
       }
     }
   ]
