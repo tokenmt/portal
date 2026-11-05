@@ -3,7 +3,7 @@
 //（<file>.sig = 原始 64 字节，wire 形态对齐 backend signed_pack.rs fetch_signed_bytes）。
 // 私钥：secrets/pack-signing.key.hex（hex 编码 32 字节 seed，gitignored，勿入库）。
 // 用法：node scripts/sign-data-packs.mjs [--key <path>] [file...]
-//   无 file 参数 = 重签两目录下全部 manifest.json / *.json 数据包。
+//   无 file 参数 = 重签三目录（holidays/llm-presets/byok-wizard）下全部 manifest.json / *.json 数据包。
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import crypto from 'node:crypto';
