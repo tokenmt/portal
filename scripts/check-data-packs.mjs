@@ -135,6 +135,59 @@ function load(dir, file) {
   }
 }
 
+// ── byok-wizard（issue#680：校验项与 backend parse_byok_wizard 硬拒项全量对齐，
+//    坏形状不能全绿发布——backend 反序列化失败会拒收整包）──
+{
+  const DIR = 'byok-wizard';
+  const dir = join(ROOT, 'public', DIR);
+  if (!existsSync(join(dir, 'manifest.json'))) {
+    fail(`${DIR}/manifest.json`, 'missing');
+  } else {
+    const manifest = load(DIR, 'manifest.json');
+    if (manifest.raw.length > MAX_MANIFEST_BYTES) fail(`${DIR}/manifest.json`, `exceeds ${MAX_MANIFEST_BYTES} bytes`);
+    if (manifest.json.schema_version > 1) fail(`${DIR}/manifest.json`, `schema_version ${manifest.json.schema_version} > 1`);
+    if (!SEMVER_RE.test(manifest.json.version)) fail(`${DIR}/manifest.json`, `version '${manifest.json.version}' not semver`);
+
+    const pack = load(DIR, 'byok-wizard.json');
+    if (pack.raw.length > MAX_PAYLOAD_BYTES) fail(`${DIR}/byok-wizard.json`, `exceeds ${MAX_PAYLOAD_BYTES} bytes`);
+    if (SEMVER_RE.test(String(pack.json.version)) === false) fail(`${DIR}/byok-wizard.json`, `version '${pack.json.version}' not semver`);
+    if (manifest.json.version !== pack.json.version) fail(`${DIR}/byok-wizard.json`, `version '${pack.json.version}' != manifest '${manifest.json.version}'`);
+    const VENDOR_ID_RE = /^[A-Za-z0-9_-]+$/;
+    const seenIds = new Set();
+    for (const v of pack.json.vendors ?? []) {
+      if (typeof v.id !== 'string' || v.id.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `empty vendor id`);
+      else if (!VENDOR_ID_RE.test(v.id)) fail(`${DIR}/byok-wizard.json`, `vendor id '${v.id}' invalid (ascii alnum - _)`);
+      else if (seenIds.has(v.id)) fail(`${DIR}/byok-wizard.json`, `duplicate vendor id '${v.id}'`);
+      else seenIds.add(v.id);
+      if (!/^https:\/\//.test(v.entry_url ?? '')) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' entry_url must be https`);
+      if (!Array.isArray(v.selectors) || v.selectors.length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' selectors empty`);
+      for (const s of v.steps ?? []) {
+        for (const lang of ['zh_CN', 'zh_HK', 'en_US']) {
+          if (typeof s.text?.[lang] !== 'string' || s.text[lang].trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step text.${lang} empty`);
+        }
+        for (const [k, val] of [['highlight_selector', s.highlight_selector], ['url_includes', s.url_includes]]) {
+          if (val !== undefined && (typeof val !== 'string' || val.trim().length === 0)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step ${k} empty string`);
+        }
+        const mt = s.match_text;
+        const mts = Array.isArray(mt) ? mt : mt !== undefined ? [mt] : [];
+        if (mts.some((t) => typeof t !== 'string' || t.trim().length === 0)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step match_text empty string`);
+      }
+      const val = v.validate ?? {};
+      if (!['openai', 'anthropic'].includes(val.protocol_slot)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' protocol_slot '${val.protocol_slot}' not supported (openai|anthropic)`);
+      if (!/^https:\/\//.test(val.base_url ?? '') && !/^http:\/\/(127\.0\.0\.1|localhost|\[::1\])/.test(val.base_url ?? '')) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' validate.base_url must be https (or loopback http)`);
+      if (typeof val.model !== 'string' || val.model.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' validate.model empty`);
+    }
+    for (const f of ['manifest.json', 'byok-wizard.json']) {
+      const sig = join(dir, `${f}.sig`);
+      if (!existsSync(sig)) fail(`${DIR}/${f}.sig`, 'missing (backend requests <file>.sig; 404 aborts fetch)');
+      else if (statSync(sig).size !== 64) fail(`${DIR}/${f}.sig`, `must be 64 raw bytes, got ${statSync(sig).size}`);
+    }
+    if (!errors.some((e) => e.startsWith('byok-wizard/'))) {
+      console.log(`check-data-packs: byok-wizard OK (${seenIds.size} vendors)`);
+    }
+  }
+}
+
 // ── 报告 ──
 if (errors.length) {
   console.error(`check-data-packs: ${errors.length} failure(s):`);
