@@ -38,7 +38,7 @@ const targets = [];
 if (files.length) {
   targets.push(...files.map((f) => resolve(process.cwd(), f)));
 } else {
-  for (const dir of ['holidays', 'llm-presets']) {
+  for (const dir of ['holidays', 'llm-presets', 'byok-wizard']) {
     const d = join(ROOT, 'public', dir);
     if (!existsSync(d)) continue;
     targets.push(join(d, 'manifest.json'));

@@ -42,7 +42,7 @@ if (!vendor) { console.error(`vendor '${opt.vendor}' 不存在`); process.exit(1
 
 // 从 backend cdp.rs 提取 OVERLAY_JS（与线上一字不差）
 const rs = readFileSync(opt.cdp, 'utf8');
-const m = rs.match(/const OVERLAY_JS: &str = r#"([\s\S]*?)"#;/);
+const m = rs.match(/const OVERLAY_JS: &str = r#+"([\s\S]*?)"#+;/);
 if (!m) { console.error('未能从 cdp.rs 提取 OVERLAY_JS'); process.exit(1); }
 const overlayJs = m[1];
 const normMatch = (m) => (Array.isArray(m) ? m : m ? [m] : []);
