@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// THUB-583: 校验 public/holidays 与 public/llm-presets 两类签名数据包是否符合 backend schema
+// THUB-583: 校验 public/holidays、public/llm-presets 与 public/byok-wizard 三类签名数据包是否符合 backend schema
 //（backend crates/server/src/services/data_packs/{holidays,llm_presets}.rs 的解析规则）。
 // 取代 check-holiday-packs.mjs（issue#228）。用法：node scripts/check-data-packs.mjs
 // 退出码 0 = 全部通过；非 0 = 有失败（fail-loud）。
@@ -152,15 +152,20 @@ function load(dir, file) {
     if (pack.raw.length > MAX_PAYLOAD_BYTES) fail(`${DIR}/byok-wizard.json`, `exceeds ${MAX_PAYLOAD_BYTES} bytes`);
     if (SEMVER_RE.test(String(pack.json.version)) === false) fail(`${DIR}/byok-wizard.json`, `version '${pack.json.version}' not semver`);
     if (manifest.json.version !== pack.json.version) fail(`${DIR}/byok-wizard.json`, `version '${pack.json.version}' != manifest '${manifest.json.version}'`);
+    if (typeof pack.json.pack !== 'string' || pack.json.pack.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `pack field empty`);
+    if (!Array.isArray(pack.json.vendors)) fail(`${DIR}/byok-wizard.json`, `vendors missing (backend Vec<WizardVendor> no default)`);
     const VENDOR_ID_RE = /^[A-Za-z0-9_-]+$/;
     const seenIds = new Set();
     for (const v of pack.json.vendors ?? []) {
+      if (typeof v.name !== 'string' || v.name.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' name empty`);
+      if (!Array.isArray(v.steps)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' steps missing (backend Vec<WizardStep> no default)`);
       if (typeof v.id !== 'string' || v.id.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `empty vendor id`);
       else if (!VENDOR_ID_RE.test(v.id)) fail(`${DIR}/byok-wizard.json`, `vendor id '${v.id}' invalid (ascii alnum - _)`);
       else if (seenIds.has(v.id)) fail(`${DIR}/byok-wizard.json`, `duplicate vendor id '${v.id}'`);
       else seenIds.add(v.id);
       if (!/^https:\/\//.test(v.entry_url ?? '')) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' entry_url must be https`);
       if (!Array.isArray(v.selectors) || v.selectors.length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' selectors empty`);
+      else if (v.selectors.some((x) => typeof x !== 'string')) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' selectors must be string[]`);
       for (const s of v.steps ?? []) {
         for (const lang of ['zh_CN', 'zh_HK', 'en_US']) {
           if (typeof s.text?.[lang] !== 'string' || s.text[lang].trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step text.${lang} empty`);
@@ -174,7 +179,10 @@ function load(dir, file) {
       }
       const val = v.validate ?? {};
       if (!['openai', 'anthropic'].includes(val.protocol_slot)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' protocol_slot '${val.protocol_slot}' not supported (openai|anthropic)`);
-      if (!/^https:\/\//.test(val.base_url ?? '') && !/^http:\/\/(127\.0\.0\.1|localhost|\[::1\])/.test(val.base_url ?? '')) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' validate.base_url must be https (or loopback http)`);
+      // issue#664 口径：host 级 loopback 判定（前缀正则会被 127.0.0.1.evil.com 绕过）
+      let baseOk = false;
+      try { const u = new URL(val.base_url ?? ''); baseOk = u.protocol === 'https:' || (u.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]', '::1'].includes(u.hostname)); } catch { baseOk = false; }
+      if (!baseOk) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' validate.base_url must be https (or loopback http host)`);
       if (typeof val.model !== 'string' || val.model.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' validate.model empty`);
     }
     for (const f of ['manifest.json', 'byok-wizard.json']) {

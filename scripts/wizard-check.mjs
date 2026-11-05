@@ -76,6 +76,7 @@ const report = await page.evaluate(({ steps }) => {
   const stepReport = steps.map((s, i) => {
     const r = { step: i + 1, text: (s.text || '').slice(0, 40), highlight: s.highlight, hit: false, matchOk: null, count: 0, rect: null };
     if (!s.highlight) { r.note = '无 selector（纯文案步骤）'; return r; }
+    if (s.url && !location.href.includes(s.url)) { r.note = 'url 门未过（本页不激活）'; return r; }
     const els = document.querySelectorAll(s.highlight);
     r.count = els.length;
     r.hit = els.length > 0;
@@ -90,6 +91,7 @@ const report = await page.evaluate(({ steps }) => {
   let cur = -1;
   steps.forEach((s, i) => {
     if (!s.highlight) return;
+    if (s.url && !location.href.includes(s.url)) return;
     const el = document.querySelector(s.highlight);
     if (!el) return;
     if (s.match && s.match.length) {
