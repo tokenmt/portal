@@ -326,8 +326,7 @@
             }
           ],
           "selectors": [
-            ".key-field input.field-value",
-            ".el-dialog__body input.field-value"
+            ".el-dialog[aria-label=\"保存您的 API Key\"] input.field-value"
           ],
           "validate": {
             "protocol_slot": "openai",
@@ -370,8 +369,7 @@
             }
           ],
           "selectors": [
-            ".key-field input.field-value",
-            ".el-dialog__body input.field-value"
+            ".el-dialog[aria-label=\"保存您的 API Key\"] input.field-value"
           ],
           "validate": {
             "protocol_slot": "anthropic",
