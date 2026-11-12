@@ -314,11 +314,23 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：系统已自动读取您的 API key（无需手动复制）。如需备份可点击「复制」，然后点击「我已妥善保存」关闭弹窗，点击字幕条右侧的「回到 TokenMate」返回控制台",
-                "zh_HK": "配置嚮導：系統已自動讀取您的 API key（無需手動複製）。如需備份可點擊「複製」，然後點擊「我已妥善保存」關閉彈窗，點擊字幕條右側的「回到 TokenMate」返回控制台",
-                "en_US": "Setup wizard: your API key has been captured automatically (no manual copy needed). Click '复制' to back it up if you like, then click '我已妥善保存' to close the popup, and click '回到 TokenMate' on the subtitle bar to return"
+                "zh_CN": "输入 API Key 名称，然后点击「确定」",
+                "zh_HK": "輸入 API Key 名稱，然後點擊「確定」",
+                "en_US": "Enter an API Key name, then click Confirm"
               },
-              "highlight_selector": ".el-dialog[aria-label=\"保存您的 API Key\"] .close-btn",
+              "highlight_selector": ".el-dialog[aria-label=\"新建API Key\"] .ok-btn",
+              "match_text": [
+                "API Key"
+              ],
+              "url_includes": "apikey"
+            },
+            {
+              "text": {
+                "zh_CN": "点击「复制」复制密钥，会自动跳回 TokenMate",
+                "zh_HK": "點擊「複製」複製密鑰，會自動跳回 TokenMate",
+                "en_US": "Click Copy to copy the key — you'll be taken back to TokenMate"
+              },
+              "highlight_selector": ".el-dialog[aria-label=\"保存您的 API Key\"] .copy-btn",
               "match_text": [
                 "API Key"
               ],
@@ -357,11 +369,23 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：系统已自动读取您的 API key（无需手动复制）。如需备份可点击「复制」，然后点击「我已妥善保存」关闭弹窗，点击字幕条右侧的「回到 TokenMate」返回控制台",
-                "zh_HK": "配置嚮導：系統已自動讀取您的 API key（無需手動複製）。如需備份可點擊「複製」，然後點擊「我已妥善保存」關閉彈窗，點擊字幕條右側的「回到 TokenMate」返回控制台",
-                "en_US": "Setup wizard: your API key has been captured automatically (no manual copy needed). Click '复制' to back it up if you like, then click '我已妥善保存' to close the popup, and click '回到 TokenMate' on the subtitle bar to return"
+                "zh_CN": "输入 API Key 名称，然后点击「确定」",
+                "zh_HK": "輸入 API Key 名稱，然後點擊「確定」",
+                "en_US": "Enter an API Key name, then click Confirm"
               },
-              "highlight_selector": ".el-dialog[aria-label=\"保存您的 API Key\"] .close-btn",
+              "highlight_selector": ".el-dialog[aria-label=\"新建API Key\"] .ok-btn",
+              "match_text": [
+                "API Key"
+              ],
+              "url_includes": "apikey"
+            },
+            {
+              "text": {
+                "zh_CN": "点击「复制」复制密钥，会自动跳回 TokenMate",
+                "zh_HK": "點擊「複製」複製密鑰，會自動跳回 TokenMate",
+                "en_US": "Click Copy to copy the key — you'll be taken back to TokenMate"
+              },
+              "highlight_selector": ".el-dialog[aria-label=\"保存您的 API Key\"] .copy-btn",
               "match_text": [
                 "API Key"
               ],
