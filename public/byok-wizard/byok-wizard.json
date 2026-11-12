@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -167,6 +167,76 @@
         "protocol_slot": "anthropic",
         "base_url": "https://open.bigmodel.cn/api/anthropic",
         "model": "glm-4-flash-250414"
+      }
+    },
+    {
+      "id": "volc-openai",
+      "name": "火山方舟",
+      "entry_url": "https://console.volcengine.com/ark/region:cn-beijing/apiKey",
+      "steps": [
+        {
+          "text": {
+            "zh_CN": "配置向导：请先登录火山引擎账号（console.volcengine.com）",
+            "zh_HK": "配置嚮導：請先登錄火山引擎賬號（console.volcengine.com）",
+            "en_US": "Setup wizard: sign in to your Volcano Engine account first (console.volcengine.com)"
+          }
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：点击「创建 API Key」按钮",
+            "zh_HK": "配置嚮導：點擊「創建 API Key」按鈕",
+            "en_US": "Setup wizard: click the '创建 API Key' (Create API Key) button"
+          },
+          "highlight_selector": ".aml-arco-btn-primary:has(.force-icon-plus)",
+          "url_includes": "apiKey"
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：名称已自动填写，直接点击弹窗右下角「创建」",
+            "zh_HK": "配置嚮導：名稱已自動填寫，直接點擊彈窗右下角「創建」",
+            "en_US": "Setup wizard: the name is prefilled — just click '创建' (Create) at the bottom-right of the dialog"
+          },
+          "highlight_selector": ".aml-arco-modal-footer .aml-arco-btn-primary",
+          "url_includes": "apiKey"
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：点击左侧菜单「开通管理」，找到「Doubao-Seed-2.1-lite」一行，点击行内「开通服务」，弹窗中点击「确定开通与授权」并等待约半分钟生效（免费额度，不使用不产生费用）",
+            "zh_HK": "配置嚮導：點擊左側菜單「開通管理」，找到「Doubao-Seed-2.1-lite」一行，點擊行內「開通服務」，彈窗中點擊「確定開通與授權」並等待約半分鐘生效（免費額度，不使用不產生費用）",
+            "en_US": "Setup wizard: open '开通管理' in the left menu, find the 'Doubao-Seed-2.1-lite' row, click '开通服务' in that row, then click '确定开通与授权' in the dialog and wait ~30 seconds to take effect (free quota; no charge unless used)"
+          },
+          "highlight_selector": ".aml-arco-table",
+          "url_includes": "openManagement"
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：回到「API Key 管理」页，点击第一行 key 右侧的眼睛图标，显示完整 key（新建的 key 默认排在第一行）",
+            "zh_HK": "配置嚮導：回到「API Key 管理」頁，點擊第一行 key 右側的眼睛圖標，顯示完整 key（新建的 key 默认排在第一行）",
+            "en_US": "Setup wizard: back on the 'API Key 管理' page, click the eye icon on the right of the first row to reveal the full key (the new key is sorted first by default)"
+          },
+          "highlight_selector": "tbody tr:first-child [class*='eye-icon-wrapper']",
+          "url_includes": "apiKey"
+        },
+        {
+          "text": {
+            "zh_CN": "配置向导：点击第一行 key 右侧的复制图标，会自动跳回 TokenMate",
+            "zh_HK": "配置嚮導：點擊第一行 key 右側的複製圖標，會自動跳回 TokenMate",
+            "en_US": "Setup wizard: click the copy icon on the right of the first row and you'll be taken back to TokenMate automatically"
+          },
+          "highlight_selector": "tbody tr:first-child [class*='force-icon-copy']",
+          "match_text": [
+            "ark-"
+          ],
+          "url_includes": "apiKey"
+        }
+      ],
+      "selectors": [
+        "tbody tr:first-child [class*='key-show-wrapper'] > div"
+      ],
+      "validate": {
+        "protocol_slot": "openai",
+        "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+        "model": "doubao-seed-2-1-lite-260915"
       }
     }
   ]
