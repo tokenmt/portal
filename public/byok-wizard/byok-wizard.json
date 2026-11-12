@@ -1,6 +1,6 @@
 {
   "pack": "byok-wizard",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "vendors": [
     {
       "id": "deepseek-openai",
@@ -116,8 +116,7 @@
         }
       ],
       "selectors": [
-        ".key-field input.field-value",
-        ".el-dialog__body input.field-value"
+        ".el-dialog[aria-label=\"保存您的 API Key\"] input.field-value"
       ],
       "validate": {
         "protocol_slot": "openai",
@@ -160,8 +159,7 @@
         }
       ],
       "selectors": [
-        ".key-field input.field-value",
-        ".el-dialog__body input.field-value"
+        ".el-dialog[aria-label=\"保存您的 API Key\"] input.field-value"
       ],
       "validate": {
         "protocol_slot": "anthropic",
