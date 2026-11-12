@@ -2,7 +2,8 @@
 // issue#659 配套：BYOK 向导 pack selector 校验台（本机调试，免盒子真机）。
 //
 // 用法：
-//   node scripts/wizard-check.mjs <pack.json> [选项]
+//   node scripts/wizard-check.mjs <pack.json> [选项]   （pack.json 也可以是 presets.json，
+//     issue#703 起向导数据在 preset.wizard 字段内）
 // 选项：
 //   --vendor <id>     校验指定 vendor（默认第一个）
 //   --url <url>       覆盖 entry_url（调试中途页面用）
@@ -37,7 +38,9 @@ for (let i = 0; i < args.length; i++) {
 if (!packPath.length) { console.error('用法: wizard-check.mjs <pack.json> [--vendor id] [--url u] [--headless] [--keep]'); process.exit(1); }
 
 const pack = JSON.parse(readFileSync(resolve(process.cwd(), packPath[0]), 'utf8'));
-const vendor = opt.vendor ? pack.vendors.find((v) => v.id === opt.vendor) : pack.vendors[0];
+// issue#703：支持 presets.json——wizard 数据内嵌在 preset.wizard 数组（跨 preset 摊平）
+const allVendors = Array.isArray(pack.vendors) ? pack.vendors : (pack.presets ?? []).flatMap((p) => p.wizard ?? []);
+const vendor = opt.vendor ? allVendors.find((v) => v.id === opt.vendor) : allVendors[0];
 if (!vendor) { console.error(`vendor '${opt.vendor}' 不存在`); process.exit(1); }
 
 // 从 backend cdp.rs 提取 OVERLAY_JS（与线上一字不差）

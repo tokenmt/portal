@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// THUB-583: 校验 public/holidays、public/llm-presets 与 public/byok-wizard 三类签名数据包是否符合 backend schema
+// THUB-583: 校验 public/holidays 与 public/llm-presets 两类签名数据包是否符合 backend schema
 //（backend crates/server/src/services/data_packs/{holidays,llm_presets}.rs 的解析规则）。
-// 取代 check-holiday-packs.mjs（issue#228）。用法：node scripts/check-data-packs.mjs
+// 取代 check-holiday-packs.mjs（issue#228）。issue#703 起 byok-wizard 包停发，向导数据并入
+// presets.json 的 wizard 字段（schema_version 2）。用法：node scripts/check-data-packs.mjs
 // 退出码 0 = 全部通过；非 0 = 有失败（fail-loud）。
 // 注意：本脚本只校验 portal 内两类包（独立仓不读 backend 文件）；内嵌快照一致性
 // 由 backend 侧 schema 测试承接。
@@ -18,6 +19,7 @@ const CC_RE = /^[A-Z]{2}$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const SEMVER_RE = /^\d+\.\d+\.\d+$/;
 const SLOT_KEYS = new Set(['anthropic', 'openai', 'gemini', 'seedance', 'minimax']);
+const VENDOR_ID_RE = /^[A-Za-z0-9_-]+$/;
 
 const errors = [];
 const fail = (file, msg) => errors.push(`${file}: ${msg}`);
@@ -88,7 +90,8 @@ function load(dir, file) {
   }
 }
 
-// ── llm-presets（THUB-583 D2/D9：单份清单，忽略未知字段，仅拒未知 schema_version）──
+// ── llm-presets（THUB-583 D2/D9：单份清单，忽略未知字段；issue#703 起 schema_version=2，
+//    presets.json 内嵌 wizard 数组，校验规则对齐 backend parse_byok_wizard）──
 {
   const DIR = 'llm-presets';
   const dir = join(ROOT, 'public', DIR);
@@ -102,8 +105,9 @@ function load(dir, file) {
 
     const presets = load(DIR, 'presets.json');
     if (presets.raw.length > MAX_PAYLOAD_BYTES) fail(`${DIR}/presets.json`, `exceeds ${MAX_PAYLOAD_BYTES} bytes`);
-    if (presets.json.schema_version > 1) fail(`${DIR}/presets.json`, `schema_version ${presets.json.schema_version} > 1`);
+    if (presets.json.schema_version !== 2) fail(`${DIR}/presets.json`, `schema_version must be 2, got ${presets.json.schema_version}`);
     const seenIds = new Set();
+    const seenVendorIds = new Set(); // issue#703：wizard vendor id 跨 preset 全局唯一
     for (const p of presets.json.presets ?? []) {
       if (typeof p.id !== 'string' || p.id.trim().length === 0) fail(`${DIR}/presets.json`, `empty preset id`);
       else if (seenIds.has(p.id)) fail(`${DIR}/presets.json`, `duplicate preset id '${p.id}'`);
@@ -123,6 +127,39 @@ function load(dir, file) {
         if (!SLOT_KEYS.has(k)) continue; // D9：未知槽位忽略（旧 backend 兼容演进）
         if (typeof v !== 'string' || !/^https?:\/\//.test(v)) fail(`${DIR}/presets.json`, `preset '${p.id}' slot '${k}' must be http(s) URL, got '${v}'`);
       }
+      // issue#703：preset.wizard（可选）——逐条校验，规则对齐 backend parse_byok_wizard
+      const vendors = Array.isArray(p.wizard) ? p.wizard : p.wizard !== undefined ? null : [];
+      if (vendors === null) fail(`${DIR}/presets.json`, `preset '${p.id}' wizard must be an array`);
+      for (const v of vendors ?? []) {
+        const tag = `preset '${p.id}' wizard`;
+        if (typeof v.name !== 'string' || v.name.trim().length === 0) fail(`${DIR}/presets.json`, `${tag} '${v.id}' name empty`);
+        if (!Array.isArray(v.steps)) fail(`${DIR}/presets.json`, `${tag} '${v.id}' steps missing (backend Vec<WizardStep> no default)`);
+        if (typeof v.id !== 'string' || v.id.trim().length === 0) fail(`${DIR}/presets.json`, `${tag}: empty vendor id`);
+        else if (!VENDOR_ID_RE.test(v.id)) fail(`${DIR}/presets.json`, `${tag} vendor id '${v.id}' invalid (ascii alnum - _)`);
+        else if (seenVendorIds.has(v.id)) fail(`${DIR}/presets.json`, `${tag}: duplicate vendor id '${v.id}' across presets`);
+        else seenVendorIds.add(v.id);
+        if (!/^https:\/\//.test(v.entry_url ?? '')) fail(`${DIR}/presets.json`, `${tag} vendor '${v.id}' entry_url must be https`);
+        if (!Array.isArray(v.selectors) || v.selectors.length === 0) fail(`${DIR}/presets.json`, `${tag} vendor '${v.id}' selectors empty`);
+        else if (v.selectors.some((x) => typeof x !== 'string')) fail(`${DIR}/presets.json`, `${tag} vendor '${v.id}' selectors must be string[]`);
+        for (const s of v.steps ?? []) {
+          for (const lang of ['zh_CN', 'zh_HK', 'en_US']) {
+            if (typeof s.text?.[lang] !== 'string' || s.text[lang].trim().length === 0) fail(`${DIR}/presets.json`, `${tag} vendor '${v.id}' step text.${lang} empty`);
+          }
+          for (const [k, val] of [['highlight_selector', s.highlight_selector], ['url_includes', s.url_includes]]) {
+            if (val !== undefined && (typeof val !== 'string' || val.trim().length === 0)) fail(`${DIR}/presets.json`, `${tag} vendor '${v.id}' step ${k} empty string`);
+          }
+          const mt = s.match_text;
+          const mts = Array.isArray(mt) ? mt : mt !== undefined ? [mt] : [];
+          if (mts.some((t) => typeof t !== 'string' || t.trim().length === 0)) fail(`${DIR}/presets.json`, `${tag} vendor '${v.id}' step match_text empty string`);
+        }
+        const val = v.validate ?? {};
+        if (!['openai', 'anthropic'].includes(val.protocol_slot)) fail(`${DIR}/presets.json`, `${tag} vendor '${v.id}' protocol_slot '${val.protocol_slot}' not supported (openai|anthropic)`);
+        // issue#664 口径：host 级 loopback 判定（前缀正则会被 127.0.0.1.evil.com 绕过）
+        let baseOk = false;
+        try { const u = new URL(val.base_url ?? ''); baseOk = u.protocol === 'https:' || (u.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]', '::1'].includes(u.hostname)); } catch { baseOk = false; }
+        if (!baseOk) fail(`${DIR}/presets.json`, `${tag} vendor '${v.id}' validate.base_url must be https (or loopback http host)`);
+        if (typeof val.model !== 'string' || val.model.trim().length === 0) fail(`${DIR}/presets.json`, `${tag} vendor '${v.id}' validate.model empty`);
+      }
     }
     for (const f of ['manifest.json', 'presets.json']) {
       const sig = join(dir, `${f}.sig`);
@@ -130,68 +167,7 @@ function load(dir, file) {
       else if (statSync(sig).size !== 64) fail(`${DIR}/${f}.sig`, `must be 64 raw bytes, got ${statSync(sig).size}`);
     }
     if (!errors.some((e) => e.startsWith('llm-presets/'))) {
-      console.log(`check-data-packs: llm-presets OK (${seenIds.size} presets)`);
-    }
-  }
-}
-
-// ── byok-wizard（issue#680：校验项与 backend parse_byok_wizard 硬拒项全量对齐，
-//    坏形状不能全绿发布——backend 反序列化失败会拒收整包）──
-{
-  const DIR = 'byok-wizard';
-  const dir = join(ROOT, 'public', DIR);
-  if (!existsSync(join(dir, 'manifest.json'))) {
-    fail(`${DIR}/manifest.json`, 'missing');
-  } else {
-    const manifest = load(DIR, 'manifest.json');
-    if (manifest.raw.length > MAX_MANIFEST_BYTES) fail(`${DIR}/manifest.json`, `exceeds ${MAX_MANIFEST_BYTES} bytes`);
-    if (manifest.json.schema_version > 1) fail(`${DIR}/manifest.json`, `schema_version ${manifest.json.schema_version} > 1`);
-    if (!SEMVER_RE.test(manifest.json.version)) fail(`${DIR}/manifest.json`, `version '${manifest.json.version}' not semver`);
-
-    const pack = load(DIR, 'byok-wizard.json');
-    if (pack.raw.length > MAX_PAYLOAD_BYTES) fail(`${DIR}/byok-wizard.json`, `exceeds ${MAX_PAYLOAD_BYTES} bytes`);
-    if (SEMVER_RE.test(String(pack.json.version)) === false) fail(`${DIR}/byok-wizard.json`, `version '${pack.json.version}' not semver`);
-    if (manifest.json.version !== pack.json.version) fail(`${DIR}/byok-wizard.json`, `version '${pack.json.version}' != manifest '${manifest.json.version}'`);
-    if (typeof pack.json.pack !== 'string' || pack.json.pack.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `pack field empty`);
-    if (!Array.isArray(pack.json.vendors)) fail(`${DIR}/byok-wizard.json`, `vendors missing (backend Vec<WizardVendor> no default)`);
-    const VENDOR_ID_RE = /^[A-Za-z0-9_-]+$/;
-    const seenIds = new Set();
-    for (const v of pack.json.vendors ?? []) {
-      if (typeof v.name !== 'string' || v.name.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' name empty`);
-      if (!Array.isArray(v.steps)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' steps missing (backend Vec<WizardStep> no default)`);
-      if (typeof v.id !== 'string' || v.id.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `empty vendor id`);
-      else if (!VENDOR_ID_RE.test(v.id)) fail(`${DIR}/byok-wizard.json`, `vendor id '${v.id}' invalid (ascii alnum - _)`);
-      else if (seenIds.has(v.id)) fail(`${DIR}/byok-wizard.json`, `duplicate vendor id '${v.id}'`);
-      else seenIds.add(v.id);
-      if (!/^https:\/\//.test(v.entry_url ?? '')) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' entry_url must be https`);
-      if (!Array.isArray(v.selectors) || v.selectors.length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' selectors empty`);
-      else if (v.selectors.some((x) => typeof x !== 'string')) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' selectors must be string[]`);
-      for (const s of v.steps ?? []) {
-        for (const lang of ['zh_CN', 'zh_HK', 'en_US']) {
-          if (typeof s.text?.[lang] !== 'string' || s.text[lang].trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step text.${lang} empty`);
-        }
-        for (const [k, val] of [['highlight_selector', s.highlight_selector], ['url_includes', s.url_includes]]) {
-          if (val !== undefined && (typeof val !== 'string' || val.trim().length === 0)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step ${k} empty string`);
-        }
-        const mt = s.match_text;
-        const mts = Array.isArray(mt) ? mt : mt !== undefined ? [mt] : [];
-        if (mts.some((t) => typeof t !== 'string' || t.trim().length === 0)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' step match_text empty string`);
-      }
-      const val = v.validate ?? {};
-      if (!['openai', 'anthropic'].includes(val.protocol_slot)) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' protocol_slot '${val.protocol_slot}' not supported (openai|anthropic)`);
-      // issue#664 口径：host 级 loopback 判定（前缀正则会被 127.0.0.1.evil.com 绕过）
-      let baseOk = false;
-      try { const u = new URL(val.base_url ?? ''); baseOk = u.protocol === 'https:' || (u.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]', '::1'].includes(u.hostname)); } catch { baseOk = false; }
-      if (!baseOk) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' validate.base_url must be https (or loopback http host)`);
-      if (typeof val.model !== 'string' || val.model.trim().length === 0) fail(`${DIR}/byok-wizard.json`, `vendor '${v.id}' validate.model empty`);
-    }
-    for (const f of ['manifest.json', 'byok-wizard.json']) {
-      const sig = join(dir, `${f}.sig`);
-      if (!existsSync(sig)) fail(`${DIR}/${f}.sig`, 'missing (backend requests <file>.sig; 404 aborts fetch)');
-      else if (statSync(sig).size !== 64) fail(`${DIR}/${f}.sig`, `must be 64 raw bytes, got ${statSync(sig).size}`);
-    }
-    if (!errors.some((e) => e.startsWith('byok-wizard/'))) {
-      console.log(`check-data-packs: byok-wizard OK (${seenIds.size} vendors)`);
+      console.log(`check-data-packs: llm-presets OK (${seenIds.size} presets, ${seenVendorIds.size} wizard vendors)`);
     }
   }
 }

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-// THUB-583: 对 public/holidays、public/llm-presets 与 public/byok-wizard 的数据包文件产出 Ed25519 签名
+// THUB-583: 对 public/holidays 与 public/llm-presets 的数据包文件产出 Ed25519 签名
 //（<file>.sig = 原始 64 字节，wire 形态对齐 backend signed_pack.rs fetch_signed_bytes）。
 // 私钥：secrets/pack-signing.key.hex（hex 编码 32 字节 seed，gitignored，勿入库）。
 // 用法：node scripts/sign-data-packs.mjs [--key <path>] [file...]
-//   无 file 参数 = 重签三目录（holidays/llm-presets/byok-wizard）下全部 manifest.json / *.json 数据包。
+//   无 file 参数 = 重签两目录（holidays/llm-presets）下全部 manifest.json / *.json 数据包。
+//   （issue#703 起 byok-wizard 包停发，向导数据并入 llm-presets。）
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import crypto from 'node:crypto';
@@ -38,7 +39,7 @@ const targets = [];
 if (files.length) {
   targets.push(...files.map((f) => resolve(process.cwd(), f)));
 } else {
-  for (const dir of ['holidays', 'llm-presets', 'byok-wizard']) {
+  for (const dir of ['holidays', 'llm-presets']) {
     const d = join(ROOT, 'public', dir);
     if (!existsSync(d)) continue;
     targets.push(join(d, 'manifest.json'));
