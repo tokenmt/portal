@@ -287,8 +287,8 @@
         "anthropic": "https://open.bigmodel.cn/api/anthropic"
       },
       "note": {
-        "zh": "OpenAI 与 Anthropic 双协议兼容（GLM Coding Plan 有独立端点体系，不适用本预设）；推荐 glm-5.3（旗舰）或 glm-5-flash（性价比）。",
-        "en": "OpenAI and Anthropic compatible (GLM Coding Plan uses separate endpoints, not covered here); try glm-5.3 or glm-5-flash."
+        "zh": "OpenAI 与 Anthropic 双协议兼容；推荐 glm-5.3（旗舰）或 glm-5-flash（性价比）。GLM Coding Plan（个人/团队）请选用专用预设。",
+        "en": "OpenAI and Anthropic compatible; try glm-5.3 (flagship) or glm-5-flash. For GLM Coding Plan (personal/team) use the dedicated presets."
       },
       "wizard": [
         {
@@ -431,6 +431,110 @@
         "zh": "仅当 Ollama 与 TokenHub backend 同机部署（自托管/盒子形态）时可用；模型名按已 pull 的模型填写。",
         "en": "Only works when Ollama runs on the same host as the TokenHub backend (self-hosted/box). Use a model name you have pulled."
       }
+    },
+    {
+      "id": "zhipu-coding-plan",
+      "label": {
+        "zh": "智谱GLM Coding Plan",
+        "en": "Zhipu GLM Coding Plan"
+      },
+      "slots": {
+        "openai": "https://open.bigmodel.cn/api/coding/paas/v4"
+      },
+      "note": {
+        "zh": "仅限 GLM Coding Plan 个人套餐 API Key（在编程套餐页创建）。标准 API Key 配此端点仍按量扣账户余额；套餐 Key 配标准端点也不享套餐额度。",
+        "en": "For GLM Coding Plan personal-plan API keys only (created on the coding-plan page). A standard API key on this endpoint still bills pay-as-you-go."
+      },
+      "wizard": [
+        {
+          "id": "zhipu-coding-openai",
+          "name": "智谱GLM Coding Plan",
+          "entry_url": "https://bigmodel.cn/apikey/coding-plan",
+          "steps": [
+            {
+              "text": {
+                "zh_CN": "配置向导：请先确认您购买的是个人 GLM Coding Plan 套餐，并登录智谱（bigmodel.cn）账号。注意：必须使用套餐页创建的 API Key，标准 API Key 配置本预设仍按量扣费。",
+                "zh_HK": "配置嚮導：請先確認您購買的是個人 GLM Coding Plan 套餐，並登錄智譜（bigmodel.cn）賬號。注意：必須使用套餐頁創建的 API Key，標準 API Key 配置本預設仍按量扣費。",
+                "en_US": "Setup wizard: make sure you have a personal GLM Coding Plan subscription and sign in to your Zhipu (bigmodel.cn) account. Note: use an API key created on the coding-plan page — a standard API key on this preset still bills pay-as-you-go."
+              }
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：进入「我的套餐」页，找到 API Key 区域，点击「新建 API Key」创建套餐专用密钥（完整 key 仅创建时展示一次）。",
+                "zh_HK": "配置嚮導：進入「我的套餐」頁，找到 API Key 區域，點擊「新建 API Key」創建套餐專用密鑰（完整 key 僅創建時展示一次）。",
+                "en_US": "Setup wizard: open 'My Plan', find the API Key section and click '新建 API Key' to create a plan key (the full key is shown only once at creation)."
+              }
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：系统已自动读取您的 API key（无需手动复制）。如需备份可点击「复制」，然后点击「我已妥善保存」关闭弹窗，点击字幕条右侧的「回到 TokenMate」返回控制台。",
+                "zh_HK": "配置嚮導：系統已自動讀取您的 API key（無需手動複製）。如需備份可點擊「複製」，然後點擊「我已妥善保存」關閉彈窗，點擊字幕條右側的「回到 TokenMate」返回控制台。",
+                "en_US": "Setup wizard: your API key has been captured automatically (no manual copy needed). Click '复制' to back it up if you like, then click '我已妥善保存' to close the popup, and click '回到 TokenMate' on the subtitle bar to return."
+              }
+            }
+          ],
+          "selectors": [
+            ".el-dialog[aria-label=\"保存您的 API Key\"] input.field-value"
+          ],
+          "validate": {
+            "protocol_slot": "openai",
+            "base_url": "https://open.bigmodel.cn/api/coding/paas/v4",
+            "model": "glm-5.3"
+          }
+        }
+      ]
+    },
+    {
+      "id": "zhipu-coding-plan-team",
+      "label": {
+        "zh": "智谱GLM Coding Plan 团队版",
+        "en": "Zhipu GLM Coding Plan (Team)"
+      },
+      "slots": {
+        "openai": "https://open.bigmodel.cn/api/coding/paas/v4"
+      },
+      "note": {
+        "zh": "仅限 GLM Coding Plan 团队套餐 API Key（在团队编程套餐→我的套餐创建），按席位规则使用额度。标准 API Key 配此端点仍按量扣账户余额。",
+        "en": "For GLM Coding Plan team-plan API keys only (created under Team Plan > My Plan), quota per seat rules. A standard API key on this endpoint still bills pay-as-you-go."
+      },
+      "wizard": [
+        {
+          "id": "zhipu-coding-team-openai",
+          "name": "智谱GLM Coding Plan 团队版",
+          "entry_url": "https://bigmodel.cn/apikey/coding-plan-team",
+          "steps": [
+            {
+              "text": {
+                "zh_CN": "配置向导：请先确认您购买的是团队 GLM Coding Plan 套餐，并登录智谱（bigmodel.cn）账号。注意：必须使用套餐页创建的 API Key，标准 API Key 配置本预设仍按量扣费。",
+                "zh_HK": "配置嚮導：請先確認您購買的是團隊 GLM Coding Plan 套餐，並登錄智譜（bigmodel.cn）賬號。注意：必須使用套餐頁創建的 API Key，標準 API Key 配置本預設仍按量扣費。",
+                "en_US": "Setup wizard: make sure you have a team GLM Coding Plan subscription and sign in to your Zhipu (bigmodel.cn) account. Note: use an API key created on the team coding-plan page — a standard API key on this preset still bills pay-as-you-go."
+              }
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：进入「我的套餐」页，找到 API Key 区域，点击「新建 API Key」创建套餐专用密钥（完整 key 仅创建时展示一次）。",
+                "zh_HK": "配置嚮導：進入「我的套餐」頁，找到 API Key 區域，點擊「新建 API Key」創建套餐專用密鑰（完整 key 僅創建時展示一次）。",
+                "en_US": "Setup wizard: open 'My Plan', find the API Key section and click '新建 API Key' to create a plan key (the full key is shown only once at creation)."
+              }
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：系统已自动读取您的 API key（无需手动复制）。如需备份可点击「复制」，然后点击「我已妥善保存」关闭弹窗，点击字幕条右侧的「回到 TokenMate」返回控制台。",
+                "zh_HK": "配置嚮導：系統已自動讀取您的 API key（無需手動複製）。如需備份可點擊「複製」，然後點擊「我已妥善保存」關閉彈窗，點擊字幕條右側的「回到 TokenMate」返回控制台。",
+                "en_US": "Setup wizard: your API key has been captured automatically (no manual copy needed). Click '复制' to back it up if you like, then click '我已妥善保存' to close the popup, and click '回到 TokenMate' on the subtitle bar to return."
+              }
+            }
+          ],
+          "selectors": [
+            ".el-dialog[aria-label=\"保存您的 API Key\"] input.field-value"
+          ],
+          "validate": {
+            "protocol_slot": "openai",
+            "base_url": "https://open.bigmodel.cn/api/coding/paas/v4",
+            "model": "glm-5.3"
+          }
+        }
+      ]
     }
   ]
 }
