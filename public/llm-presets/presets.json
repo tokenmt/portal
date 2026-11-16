@@ -18,7 +18,8 @@
         "en": "OpenAI Official"
       },
       "slots": {
-        "openai": "https://api.openai.com"
+        "openai": "https://api.openai.com",
+        "openai-responses": "https://api.openai.com"
       }
     },
     {
@@ -61,9 +62,9 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：点击「创建 API Key」按钮",
-                "zh_HK": "配置嚮導：點擊「創建 API Key」按鈕",
-                "en_US": "Setup wizard: click the '创建 API Key' (Create API Key) button"
+                "zh_CN": "配置向导：如果列表中已有可用 key，可直接复用，跳过创建（开通管理仍需完成）；否则点击「创建 API Key」按钮新建",
+                "zh_HK": "配置嚮導：如果列表中已有可用 key，可直接復用，跳過創建（開通管理仍需完成）；否則點擊「創建 API Key」按鈕新建",
+                "en_US": "Setup wizard: if you already have a usable key in the list, reuse it and skip creation (you still need to complete service activation); otherwise click '创建 API Key' (Create API Key) to make a new one"
               },
               "highlight_selector": ".aml-arco-btn-primary:has(.force-icon-plus)",
               "url_includes": "apiKey"
@@ -430,6 +431,20 @@
       "note": {
         "zh": "仅当 Ollama 与 TokenHub backend 同机部署（自托管/盒子形态）时可用；模型名按已 pull 的模型填写。",
         "en": "Only works when Ollama runs on the same host as the TokenHub backend (self-hosted/box). Use a model name you have pulled."
+      }
+    },
+    {
+      "id": "aliyun-dashscope",
+      "label": {
+        "zh": "阿里云百炼",
+        "en": "Alibaba Bailian"
+      },
+      "slots": {
+        "dashscope-image": "https://dashscope.aliyuncs.com"
+      },
+      "note": {
+        "zh": "DashScope 兼容异步图像任务（万相图像/千问文生图）；地址为裸域名，后端自动拼接任务路径。示例为北京区域端点。",
+        "en": "DashScope-compatible async image tasks (Wan Image / Qwen-Image); the URL is a bare domain, the backend appends task paths. Beijing region shown."
       }
     },
     {
