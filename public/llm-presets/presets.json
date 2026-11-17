@@ -464,7 +464,7 @@
         {
           "id": "zhipu-coding-openai",
           "name": "智谱GLM Coding Plan",
-          "entry_url": "https://bigmodel.cn/apikey/coding-plan",
+          "entry_url": "https://bigmodel.cn/coding-plan/",
           "steps": [
             {
               "text": {
@@ -475,9 +475,9 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：进入「我的套餐」页，找到 API Key 区域，点击「新建 API Key」创建套餐专用密钥（完整 key 仅创建时展示一次）。",
-                "zh_HK": "配置嚮導：進入「我的套餐」頁，找到 API Key 區域，點擊「新建 API Key」創建套餐專用密鑰（完整 key 僅創建時展示一次）。",
-                "en_US": "Setup wizard: open 'My Plan', find the API Key section and click '新建 API Key' to create a plan key (the full key is shown only once at creation)."
+                "zh_CN": "配置向导：进入「个人编程套餐 > 套餐概览」页，找到 API Key 区域，点击「新建 API Key」创建套餐专用密钥（完整 key 仅创建时展示一次）。",
+                "zh_HK": "配置嚮導：進入「個人編程套餐 > 套餐概覽」頁，找到 API Key 區域，點擊「新建 API Key」創建套餐專用密鑰（完整 key 僅創建時展示一次）。",
+                "en_US": "Setup wizard: open 'Personal Coding Plan > Plan Overview', find the API Key section and click '新建 API Key' to create a plan key (the full key is shown only once at creation)."
               }
             },
             {
