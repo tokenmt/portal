@@ -119,15 +119,6 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：如果左侧白色智能助手面板展开占位、遮挡了页面内容，请点击顶栏「问问 Agent」按钮，展开面板以便进行下一步",
-                "zh_HK": "配置嚮導：如果左側白色智能助手面板展開佔位、遮擋了頁面內容，請點擊頂欄「問問 Agent」按鈕，展開面板以便進行下一步",
-                "en_US": "Setup wizard: if the white AI assistant panel on the left is expanded and covering page content, click '问问 Agent' (Ask Agent) in the top bar to expand the panel for the next step"
-              },
-              "highlight_selector": ".ark-topbar-regular-content button[class*='aml-arco-btn']",
-              "url_includes": "apiKey"
-            },
-            {
-              "text": {
                 "zh_CN": "配置向导：点击智能助手面板右上角的 ✕ 关闭按钮收起面板，露出被遮挡的页面内容",
                 "zh_HK": "配置嚮導：點擊智能助手面板右上角的 ✕ 關閉按鈕收起面板，露出被遮擋的頁面內容",
                 "en_US": "Setup wizard: click the ✕ close button at the top-right of the AI assistant panel to collapse it and reveal the covered page content"
