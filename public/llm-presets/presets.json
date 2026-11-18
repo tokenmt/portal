@@ -107,6 +107,15 @@
                 "ark-"
               ],
               "url_includes": "apiKey"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：先点击智能助手面板的关闭按钮收起面板，避免遮挡后续的 key 操作",
+                "zh_HK": "配置嚮導：先點擊智能助手面板的關閉按鈕收起面板，避免遮擋後續的 key 操作",
+                "en_US": "Setup wizard: click the assistant panel's close button to collapse it first, so it won't block the key actions"
+              },
+              "highlight_selector": "[class*='assistantClose']",
+              "url_includes": "apiKey"
             }
           ],
           "selectors": [
