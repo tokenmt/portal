@@ -110,15 +110,6 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：先点击智能助手面板的关闭按钮收起面板，避免遮挡后续的 key 操作",
-                "zh_HK": "配置嚮導：先點擊智能助手面板的關閉按鈕收起面板，避免遮擋後續的 key 操作",
-                "en_US": "Setup wizard: click the assistant panel's close button to collapse it first, so it won't block the key actions"
-              },
-              "highlight_selector": "[class*='assistantClose']",
-              "url_includes": "apiKey"
-            },
-            {
-              "text": {
                 "zh_CN": "配置向导：点击智能助手面板右上角的 ✕ 关闭按钮收起面板，露出被遮挡的页面内容",
                 "zh_HK": "配置嚮導：點擊智能助手面板右上角的 ✕ 關閉按鈕收起面板，露出被遮擋的頁面內容",
                 "en_US": "Setup wizard: click the ✕ close button at the top-right of the AI assistant panel to collapse it and reveal the covered page content"
