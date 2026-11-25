@@ -124,7 +124,8 @@
           "validate": {
             "protocol_slot": "openai",
             "base_url": "https://ark.cn-beijing.volces.com/api/v3",
-            "model": "doubao-seed-2-1-lite-260915"
+            "model": "doubao-seed-2-1-lite-260915",
+            "chat_path": "/chat/completions"
           }
         }
       ]
@@ -143,7 +144,66 @@
       "note": {
         "zh": "官方域名已由 api.minimaxi.com 迁移至 api.minimax.cn；同 key 覆盖对话与视频生成。",
         "en": "Official domain moved from api.minimaxi.com to api.minimax.cn; one key covers chat and video."
-      }
+      },
+      "wizard": [
+        {
+          "id": "minimax-openai",
+          "name": "MiniMax",
+          "entry_url": "https://platform.minimax.cn/console/keys",
+          "steps": [
+            {
+              "text": {
+                "zh_CN": "配置向导：请先登录 MiniMax 开放平台（platform.minimax.cn）账号，登录方式任选（可能需完成滑块安全验证）",
+                "zh_HK": "配置嚮導：請先登錄 MiniMax 開放平臺（platform.minimax.cn）賬號，登錄方式任選（可能需完成滑塊安全驗證）",
+                "en_US": "Setup wizard: sign in to your MiniMax platform (platform.minimax.cn) account first; any sign-in method works (a slider captcha may be required)"
+              },
+              "url_includes": "login"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：进入「API Key」页，点击「创建 API Key」按钮（同 key 覆盖对话与视频生成）",
+                "zh_HK": "配置嚮導：進入「API Key」頁，點擊「創建 API Key」按鈕（同 key 覆蓋對話與視頻生成）",
+                "en_US": "Setup wizard: open the 'API Key' page and click '创建 API Key' (one key covers both chat and video)"
+              },
+              "highlight_selector": "main#console-main button:has(svg.lucide-plus)",
+              "url_includes": "console/keys"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：输入 API Key 名称（如 TokenMate），然后点击「创建 API Key」",
+                "zh_HK": "配置嚮導：輸入 API Key 名稱（如 TokenMate），然後點擊「創建 API Key」",
+                "en_US": "Setup wizard: enter an API Key name (e.g. TokenMate), then click '创建 API Key'"
+              },
+              "highlight_selector": "[role=dialog] button.bg-primary",
+              "match_text": [
+                "API Key"
+              ],
+              "url_includes": "console/keys"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：点击「复制」图标复制密钥，会自动跳回 TokenMate（完整 key 仅创建时展示一次，同 key 覆盖对话与视频生成）",
+                "zh_HK": "配置嚮導：點擊「複製」圖標複製密鑰，會自動跳回 TokenMate（完整 key 僅創建時展示一次，同 key 覆蓋對話與視頻生成）",
+                "en_US": "Setup wizard: click the copy icon to copy the key — you'll be taken back to TokenMate (the full key is shown only once at creation; one key covers chat and video)"
+              },
+              "highlight_selector": "[role=dialog] button:has(svg.lucide-copy)",
+              "match_text": [
+                "sk-"
+              ],
+              "url_includes": "console/keys"
+            }
+          ],
+          "selectors": [
+            "[role=dialog] code"
+          ],
+          "validate": {
+            "protocol_slot": "openai",
+            "base_url": "https://api.minimax.cn/v1",
+            "model": "MiniMax-Text-01",
+            "chat_path": "/chat/completions"
+          }
+        }
+      ]
     },
     {
       "id": "minimax-intl",
@@ -270,7 +330,63 @@
       "note": {
         "zh": "OpenAI 兼容模式与 Anthropic 兼容端点并存；推荐 qwen-max / qwen-plus，企业用户可换业务空间专属域名。",
         "en": "OpenAI-compatible mode plus Anthropic-compatible endpoint; try qwen-max / qwen-plus. Enterprises may switch to workspace-specific domains."
-      }
+      },
+      "wizard": [
+        {
+          "id": "bailian-openai",
+          "name": "阿里百炼",
+          "entry_url": "https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key",
+          "steps": [
+            {
+              "text": {
+                "zh_CN": "配置向导：请先登录阿里云百炼控制台（bailian.console.aliyun.com）",
+                "zh_HK": "配置嚮導：請先登錄阿里雲百煉控制台（bailian.console.aliyun.com）",
+                "en_US": "Setup wizard: sign in to the Alibaba Bailian console first (bailian.console.aliyun.com)"
+              }
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：点击「创建API-KEY」按钮新建密钥",
+                "zh_HK": "配置嚮導：點擊「創建API-KEY」按鈕新建密鑰",
+                "en_US": "Setup wizard: click '创建API-KEY' (Create API-KEY) to make a new key"
+              },
+              "highlight_selector": "button.bailian-web-btn-primary",
+              "url_includes": "api-key"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：业务空间与权限用默认值即可，直接点击弹窗中的「确定」",
+                "zh_HK": "配置嚮導：業務空間與權限用默認值即可，直接點擊彈窗中的「確定」",
+                "en_US": "Setup wizard: keep the default workspace and permissions — just click '确定' (Confirm) in the dialog"
+              },
+              "highlight_selector": ".bailian-web-modal .bailian-web-btn-primary",
+              "match_text": [
+                "归属业务空间"
+              ]
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：弹窗中除 API Key 外还显示三个接口地址，请复制「OpenAI 兼容地址」（以 /compatible-mode/v1 结尾）备用；普通账号使用默认地址即可，TokenMate 已自动配置，无需额外操作。企业业务空间专属域名请先复制保存——点击「复制」key 后会自动跳回 TokenMate，须在开始前记下；若已跳回且未保存地址，须重新创建 API Key 查看弹窗，再回到向导第一步「端点地址」输入框填入",
+                "zh_HK": "配置嚮導：彈窗中除 API Key 外還顯示三個接口地址，請複製「OpenAI 兼容地址」（以 /compatible-mode/v1 結尾）備用；普通帳號使用默認地址即可，TokenMate 已自動配置，無需額外操作。企業業務空間專屬域名請先複製保存——點擊「複製」key 後會自動跳回 TokenMate，須在開始前記下；若已跳回且未保存地址，須重新創建 API Key 查看彈窗，再回到嚮導第一步「端點地址」輸入框填入",
+                "en_US": "Setup wizard: besides the API key, the popup shows three endpoint URLs — copy the 'OpenAI 兼容地址' (OpenAI-compatible URL, ending with /compatible-mode/v1) for reference. Regular accounts need nothing further: TokenMate already uses the default URL. For workspace-specific enterprise domains, copy and save it BEFORE copying the key — clicking '复制' (Copy) returns you to TokenMate automatically; if you've been returned without saving it, create a new API key to bring up the popup again, then paste the URL into the 'Endpoint URL' field on the wizard's first step"
+              },
+              "highlight_selector": ".bailian-web-modal .bailian-web-btn-default",
+              "match_text": [
+                "API快捷接入"
+              ]
+            }
+          ],
+          "selectors": [
+            ".bailian-web-modal [class*='_keyText']"
+          ],
+          "validate": {
+            "protocol_slot": "openai",
+            "base_url": "https://dashscope.aliyuncs.com/compatible-mode",
+            "model": "qwen-max",
+            "allow_base_url_override": true
+          }
+        }
+      ]
     },
     {
       "id": "siliconflow",
@@ -284,7 +400,98 @@
       "note": {
         "zh": "OpenAI 兼容托管平台；模型 ID 带前缀，如 deepseek-ai/DeepSeek-V4.1-Flash、deepseek-ai/DeepSeek-V4-Pro。",
         "en": "OpenAI-compatible hosting; model IDs are prefixed, e.g. deepseek-ai/DeepSeek-V4.1-Flash, deepseek-ai/DeepSeek-V4-Pro."
-      }
+      },
+      "wizard": [
+        {
+          "id": "siliconflow-openai",
+          "name": "SiliconFlow",
+          "entry_url": "https://cloud.siliconflow.cn/me/account/ak",
+          "steps": [
+            {
+              "text": {
+                "zh_CN": "配置向导：请先登录硅基流动账号（支持手机验证码、微信或邮箱登录）",
+                "zh_HK": "配置嚮導：請先登錄矽基流動賬號（支持手機驗證碼、微信或郵箱登錄）",
+                "en_US": "Setup wizard: sign in to your SiliconFlow account first (phone code, WeChat or email)"
+              }
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：点击左侧「API 密钥」进入密钥管理页",
+                "zh_HK": "配置嚮導：點擊左側「API 密鑰」進入密鑰管理頁",
+                "en_US": "Setup wizard: click 'API 密钥' in the left menu to open the key page"
+              },
+              "highlight_selector": "a[href*='/account/ak']"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：点击「新建 API 密钥」按钮",
+                "zh_HK": "配置嚮導：點擊「新建 API 密鑰」按鈕",
+                "en_US": "Setup wizard: click the '新建 API 密钥' (New API Key) button"
+              },
+              "highlight_selector": "button.ant-btn-primary",
+              "match_text": [
+                "新建 API 密钥"
+              ],
+              "url_includes": "/account/ak"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：可填写描述（如 tokenmate），然后点击「新建密钥」",
+                "zh_HK": "配置嚮導：可填寫描述（如 tokenmate），然後點擊「新建密鑰」",
+                "en_US": "Setup wizard: optionally enter a description (e.g. tokenmate), then click '新建密钥'"
+              },
+              "highlight_selector": ".ant-modal .ant-btn-primary",
+              "match_text": [
+                "新建密钥"
+              ]
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：点击密钥旁的复制图标，会自动跳回 TokenMate",
+                "zh_HK": "配置嚮導：點擊密鑰旁的複製圖標，會自動跳回 TokenMate",
+                "en_US": "Setup wizard: click the copy icon next to the key and you'll be taken back to TokenMate"
+              },
+              "highlight_selector": ".ant-typography-copy",
+              "match_text": [
+                "sk-"
+              ],
+              "url_includes": "/account/ak"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：点击密钥列表中的眼睛图标，显示完整密钥",
+                "zh_HK": "配置嚮導：點擊密鑰列表中的眼睛圖標，顯示完整密鑰",
+                "en_US": "Setup wizard: click the eye icon in the key list to reveal the full key"
+              },
+              "highlight_selector": ".anticon-eye-invisible",
+              "match_text": [
+                "sk-"
+              ],
+              "url_includes": "/account/ak"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：检测到账号未实名——未实名无法创建 API 密钥，请点击「立即认证」完成实名后再继续",
+                "zh_HK": "配置嚮導：檢測到賬號未實名——未實名無法創建 API 密鑰，請點擊「立即認證」完成實名後再繼續",
+                "en_US": "Setup wizard: your account is not real-name verified — key creation is blocked until verified. Click the verify button to complete verification first"
+              },
+              "highlight_selector": ".ant-modal .ant-btn-primary",
+              "match_text": [
+                "未进行实名认证"
+              ]
+            }
+          ],
+          "selectors": [
+            ".ant-table-tbody span"
+          ],
+          "validate": {
+            "protocol_slot": "openai",
+            "base_url": "https://api.siliconflow.cn/v1",
+            "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+            "chat_path": "/chat/completions"
+          }
+        }
+      ]
     },
     {
       "id": "zhipu",
@@ -353,7 +560,8 @@
           "validate": {
             "protocol_slot": "openai",
             "base_url": "https://open.bigmodel.cn/api/paas/v4",
-            "model": "glm-4-flash-250414"
+            "model": "glm-4-flash-250414",
+            "chat_path": "/chat/completions"
           }
         },
         {
@@ -426,7 +634,150 @@
       "note": {
         "zh": "OpenAI 与 Anthropic 双协议兼容；默认 kimi-k3，亦可用 kimi-k2.6 / kimi-k2.7-code。",
         "en": "OpenAI and Anthropic compatible; default kimi-k3, also kimi-k2.6 / kimi-k2.7-code."
-      }
+      },
+      "wizard": [
+        {
+          "id": "moonshot-openai",
+          "name": "Kimi",
+          "entry_url": "https://platform.kimi.com/console/api-keys",
+          "steps": [
+            {
+              "text": {
+                "zh_CN": "配置向导：请先登录 Kimi 开放平台账号（支持微信扫码 / 手机号 / 账号密码）",
+                "zh_HK": "配置嚮導：請先登錄 Kimi 開放平台賬號（支持微信掃碼 / 手機號 / 賬號密碼）",
+                "en_US": "Setup wizard: sign in to your Kimi open platform account first (WeChat QR, phone, or password)"
+              }
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：在左侧菜单点击「API Key 管理」进入密钥页",
+                "zh_HK": "配置嚮導：在左側菜單點擊「API Key 管理」進入密鑰頁",
+                "en_US": "Setup wizard: click 'API Key 管理' in the left menu to open the key page"
+              },
+              "highlight_selector": "a[href='/console/api-keys']"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：点击「新建 API Key」按钮",
+                "zh_HK": "配置嚮導：點擊「新建 API Key」按鈕",
+                "en_US": "Setup wizard: click the '新建 API Key' (Create API Key) button"
+              },
+              "highlight_selector": "button.ant-btn-primary",
+              "match_text": "新建 API Key",
+              "url_includes": "api-keys"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：请输入名称（如：tokenmate），在「项目」下拉中选择一个项目（必选），然后点击「确 定」",
+                "zh_HK": "配置嚮導：請輸入名稱（如：tokenmate），在「項目」下拉中選擇一個項目（必選），然後點擊「確 定」",
+                "en_US": "Setup wizard: enter a name (e.g. tokenmate), pick a project in the required '项目' dropdown, then click '确 定'"
+              },
+              "highlight_selector": ".ant-modal-footer .ant-btn-primary",
+              "match_text": [
+                "新建 API Key",
+                "API Key"
+              ],
+              "url_includes": "api-keys"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：请点击弹窗中的复制图标按钮，会自动跳回 TokenMate",
+                "zh_HK": "配置嚮導：請點擊彈窗中的複製圖標按鈕，會自動跳回 TokenMate",
+                "en_US": "Setup wizard: click the copy icon button in the popup and you'll be taken back to TokenMate automatically"
+              },
+              "highlight_selector": ".ant-modal .ant-btn-icon-only",
+              "match_text": [
+                "您的密钥",
+                "密钥"
+              ],
+              "url_includes": "api-keys"
+            }
+          ],
+          "selectors": [
+            ".ant-modal input[readonly]"
+          ],
+          "validate": {
+            "protocol_slot": "openai",
+            "base_url": "https://api.moonshot.cn",
+            "model": "kimi-k3"
+          }
+        }
+      ]
+    },
+    {
+      "id": "kimi-code",
+      "label": {
+        "zh": "Kimi Code",
+        "en": "Kimi Code"
+      },
+      "slots": {
+        "openai": "https://api.kimi.com/coding/v1",
+        "anthropic": "https://api.kimi.com/coding"
+      },
+      "note": {
+        "zh": "Kimi Code 订阅制 API（会员权益内，上限 5 把 key）；OpenAI 与 Anthropic 双协议兼容，默认 k3.1-pro（thinking 必开）。",
+        "en": "Kimi Code subscription API (member benefit, up to 5 keys); OpenAI and Anthropic compatible, default k3.1-pro (thinking always on)."
+      },
+      "wizard": [
+        {
+          "id": "kimicode-anthropic",
+          "name": "Kimi Code",
+          "entry_url": "https://www.kimi.com/code/console",
+          "steps": [
+            {
+              "text": {
+                "zh_CN": "配置向导：请先登录 Kimi 账号，登录后如未自动进入控制台，请点击页面上方「Console」进入（每账号最多 5 把 key）",
+                "zh_HK": "配置嚮導：請先登錄 Kimi 賬號，登錄後如未自動進入控制台，請點擊頁面上方「Console」進入（每賬號最多 5 把 key）",
+                "en_US": "Setup wizard: sign in to your Kimi account first. If not taken to the console automatically after sign-in, click 'Console' at the top (up to 5 keys per account)"
+              },
+              "highlight_selector": "a[href='/code/console'], a[href='/console']"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：点击「新建 API Key」按钮",
+                "zh_HK": "配置嚮導：點擊「新建 API Key」按鈕",
+                "en_US": "Setup wizard: click the 'Create API Key' button"
+              },
+              "highlight_selector": "button.create-api-btn",
+              "match_text": [
+                "新建 API Key",
+                "Create API Key"
+              ],
+              "url_includes": "code/console"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：在弹窗中输入名称（如：tokenmate），然后点击「新建」",
+                "zh_HK": "配置嚮導：在彈窗中輸入名稱（如：tokenmate），然後點擊「新建」",
+                "en_US": "Setup wizard: enter a name (e.g. tokenmate) in the popup, then click 'Create'"
+              },
+              "highlight_selector": ".modal-content .kimi-button.primary:not(.create-api-btn)",
+              "url_includes": "code/console"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：请点击弹窗中的复制图标按钮，会自动跳回 TokenMate",
+                "zh_HK": "配置嚮導：請點擊彈窗中的複製圖標按鈕，會自動跳回 TokenMate",
+                "en_US": "Setup wizard: click the copy icon button in the popup and you'll be taken back to TokenMate automatically"
+              },
+              "highlight_selector": ".api-key-display .simple-button",
+              "match_text": [
+                "无法再次查看",
+                "won't be shown again"
+              ],
+              "url_includes": "code/console"
+            }
+          ],
+          "selectors": [
+            "input.api-key-text"
+          ],
+          "validate": {
+            "protocol_slot": "anthropic",
+            "base_url": "https://api.kimi.com/coding",
+            "model": "k3.1-pro"
+          }
+        }
+      ]
     },
     {
       "id": "ollama-local",
@@ -503,7 +854,8 @@
           "validate": {
             "protocol_slot": "openai",
             "base_url": "https://open.bigmodel.cn/api/coding/paas/v4",
-            "model": "glm-5.3"
+            "model": "glm-5.3",
+            "chat_path": "/chat/completions"
           }
         }
       ]
