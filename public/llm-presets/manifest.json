@@ -1,4 +1,5 @@
 {
   "schema_version": 1,
-  "version": "1.23.0"
+  "version": "1.24.0",
+  "payload_sha256": "960c5d022a412c694757bfb848373845dad48c37ccd741c800f070b1a52dbf9a"
 }

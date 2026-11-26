@@ -71,15 +71,6 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：名称已自动填写，直接点击弹窗右下角「创建」",
-                "zh_HK": "配置嚮導：名稱已自動填寫，直接點擊彈窗右下角「創建」",
-                "en_US": "Setup wizard: the name is prefilled — just click '创建' (Create) at the bottom-right of the dialog"
-              },
-              "highlight_selector": ".aml-arco-modal-footer .aml-arco-btn-primary",
-              "url_includes": "apiKey"
-            },
-            {
-              "text": {
                 "zh_CN": "配置向导：点击左侧菜单「开通管理」，找到「Doubao-Seed-2.1-lite」一行，点击行内「开通服务」，弹窗中点击「确定开通与授权」并等待约半分钟生效（免费额度，不使用不产生费用）",
                 "zh_HK": "配置嚮導：點擊左側菜單「開通管理」，找到「Doubao-Seed-2.1-lite」一行，點擊行內「開通服務」，彈窗中點擊「確定開通與授權」並等待約半分鐘生效（免費額度，不使用不產生費用）",
                 "en_US": "Setup wizard: open '开通管理' in the left menu, find the 'Doubao-Seed-2.1-lite' row, click '开通服务' in that row, then click '确定开通与授权' in the dialog and wait ~30 seconds to take effect (free quota; no charge unless used)"
@@ -98,11 +89,11 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：点击第一行 key 右侧的复制图标，会自动跳回 TokenMate",
-                "zh_HK": "配置嚮導：點擊第一行 key 右側的複製圖標，會自動跳回 TokenMate",
-                "en_US": "Setup wizard: click the copy icon on the right of the first row and you'll be taken back to TokenMate automatically"
+                "zh_CN": "可以点击新建 API Key，也可以直接复制下方已有的 Key",
+                "zh_HK": "可以點擊新建 API Key，也可以直接複製下方已有的 Key",
+                "en_US": "Create a new API Key, or copy your existing Key below"
               },
-              "highlight_selector": "tbody tr:first-child [class*='force-icon-copy']",
+              "highlight_selector": "tbody tr:first-child [class*='force-icon-copy'], tbody tr:first-child [class*='eye-icon-wrapper'], .aml-arco-btn-primary:has(.force-icon-plus)",
               "match_text": [
                 "ark-"
               ],
@@ -115,6 +106,15 @@
                 "en_US": "Setup wizard: click the ✕ close button at the top-right of the AI assistant panel to collapse it and reveal the covered page content"
               },
               "highlight_selector": "[class*='agentSlot'] button[class*='aml-design-arco-icon-button'][class*='size-8']",
+              "url_includes": "apiKey"
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：名称已自动填写，直接点击弹窗右下角「创建」",
+                "zh_HK": "配置嚮導：名稱已自動填寫，直接點擊彈窗右下角「創建」",
+                "en_US": "Setup wizard: the name is prefilled — just click '创建' (Create) at the bottom-right of the dialog"
+              },
+              "highlight_selector": ".aml-arco-modal-footer .aml-arco-btn-primary",
               "url_includes": "apiKey"
             }
           ],
@@ -161,11 +161,11 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：进入「API Key」页，点击「创建 API Key」按钮（同 key 覆盖对话与视频生成）",
-                "zh_HK": "配置嚮導：進入「API Key」頁，點擊「創建 API Key」按鈕（同 key 覆蓋對話與視頻生成）",
-                "en_US": "Setup wizard: open the 'API Key' page and click '创建 API Key' (one key covers both chat and video)"
+                "zh_CN": "可以点击新建 API Key，也可以直接复制下方已有的 Key",
+                "zh_HK": "可以點擊新建 API Key，也可以直接複製下方已有的 Key",
+                "en_US": "Create a new API Key, or copy your existing Key below"
               },
-              "highlight_selector": "main#console-main button:has(svg.lucide-plus)",
+              "highlight_selector": "main#console-main button:has(svg.lucide-plus), main#console-main button:has(svg.lucide-copy)",
               "url_includes": "console/keys"
             },
             {
@@ -436,17 +436,6 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：可填写描述（如 tokenmate），然后点击「新建密钥」",
-                "zh_HK": "配置嚮導：可填寫描述（如 tokenmate），然後點擊「新建密鑰」",
-                "en_US": "Setup wizard: optionally enter a description (e.g. tokenmate), then click '新建密钥'"
-              },
-              "highlight_selector": ".ant-modal .ant-btn-primary",
-              "match_text": [
-                "新建密钥"
-              ]
-            },
-            {
-              "text": {
                 "zh_CN": "配置向导：点击密钥旁的复制图标，会自动跳回 TokenMate",
                 "zh_HK": "配置嚮導：點擊密鑰旁的複製圖標，會自動跳回 TokenMate",
                 "en_US": "Setup wizard: click the copy icon next to the key and you'll be taken back to TokenMate"
@@ -459,11 +448,11 @@
             },
             {
               "text": {
-                "zh_CN": "配置向导：点击密钥列表中的眼睛图标，显示完整密钥",
-                "zh_HK": "配置嚮導：點擊密鑰列表中的眼睛圖標，顯示完整密鑰",
-                "en_US": "Setup wizard: click the eye icon in the key list to reveal the full key"
+                "zh_CN": "可以点击新建 API Key，也可以直接复制下方已有的 Key",
+                "zh_HK": "可以點擊新建 API Key，也可以直接複製下方已有的 Key",
+                "en_US": "Create a new API Key, or copy your existing Key below"
               },
-              "highlight_selector": ".anticon-eye-invisible",
+              "highlight_selector": ".anticon-eye-invisible, button.ant-btn-primary",
               "match_text": [
                 "sk-"
               ],
@@ -479,6 +468,17 @@
               "match_text": [
                 "未进行实名认证"
               ]
+            },
+            {
+              "text": {
+                "zh_CN": "配置向导：可填写描述（如 tokenmate），然后点击「新建密钥」",
+                "zh_HK": "配置嚮導：可填寫描述（如 tokenmate），然後點擊「新建密鑰」",
+                "en_US": "Setup wizard: optionally enter a description (e.g. tokenmate), then click '新建密钥'"
+              },
+              "highlight_selector": ".ant-modal .ant-btn-primary",
+              "match_text": [
+                "新建密钥"
+              ]
             }
           ],
           "selectors": [
@@ -489,7 +489,10 @@
             "base_url": "https://api.siliconflow.cn/v1",
             "model": "deepseek-ai/DeepSeek-V4.1-Flash",
             "chat_path": "/chat/completions"
-          }
+          },
+          "extract": "visible",
+          "event_phase": "capture",
+          "mask_policy": "mixed"
         }
       ]
     },
