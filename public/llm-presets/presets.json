@@ -400,7 +400,8 @@
         "en": "SiliconFlow"
       },
       "slots": {
-        "openai": "https://api.siliconflow.cn/v1"
+        "openai": "https://api.siliconflow.cn/v1",
+        "anthropic": "https://api.siliconflow.cn"
       },
       "note": {
         "zh": "OpenAI 兼容托管平台；模型 ID 带前缀，如 deepseek-ai/DeepSeek-V4.1-Flash、deepseek-ai/DeepSeek-V4-Pro。",
@@ -822,7 +823,8 @@
         "en": "Zhipu GLM Coding Plan"
       },
       "slots": {
-        "openai": "https://open.bigmodel.cn/api/coding/paas/v4"
+        "openai": "https://open.bigmodel.cn/api/coding/paas/v4",
+        "anthropic": "https://open.bigmodel.cn/api/anthropic"
       },
       "note": {
         "zh": "仅限 GLM Coding Plan 套餐 API Key（个人/团队通用；个人在编程套餐 > 套餐概览创建，团队在团队编程套餐 > 我的套餐创建）。标准 API Key 配此端点仍按量扣账户余额。",
